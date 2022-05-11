@@ -31,13 +31,19 @@ class DashboardUserActivity : AppCompatActivity() {
                 R.id.esp -> {  }
                 R.id.myAccount -> {
                     if (open != "c"){
-                        fragSelect(MyAccountFragment())
+//                        fragSelect(MyAccountFragment())
+                        fragAdd()
                         open = "c"
                     }
                 }
             }
             true
         }
+    }
+    fun fragAdd(){
+        val frag: Fragment? = supportFragmentManager.findFragmentById(R.id.frag)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.frag, MyAccountFragment()).addToBackStack(null).commit()
     }
     private fun fragSelect(fragShow: Fragment) {
         //Instanciamos el contenedor

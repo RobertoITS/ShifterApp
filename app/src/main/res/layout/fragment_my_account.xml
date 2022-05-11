@@ -76,29 +76,28 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/nameCont"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="220dp"
             android:layout_height="60dp"
             android:layout_marginTop="30dp"
+            android:fontFamily="@font/roboto_thin"
+            android:hint="Nombre"
             app:boxCornerRadiusBottomEnd="15dp"
             app:boxCornerRadiusBottomStart="15dp"
             app:boxCornerRadiusTopEnd="15dp"
             app:boxCornerRadiusTopStart="15dp"
-            android:hint="Nombre"
-            android:fontFamily="@font/roboto_thin"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            app:layout_constraintTop_toBottomOf="@+id/view"
-            app:layout_constraintStart_toEndOf="@+id/card"
+            app:layout_constraintBottom_toTopOf="@+id/lastNameCont"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/lastNameCont">
+            app:layout_constraintStart_toEndOf="@+id/card"
+            app:layout_constraintTop_toBottomOf="@+id/view">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/name"
-                android:fontFamily="@font/roboto_thin"
-                android:enabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Roberto"
-                />
+                android:enabled="false"
+                android:fontFamily="@font/roboto_thin"
+                android:text="Roberto" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

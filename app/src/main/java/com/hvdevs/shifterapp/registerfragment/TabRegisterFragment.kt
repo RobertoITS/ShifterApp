@@ -119,10 +119,10 @@ class TabRegisterFragment : Fragment() {
                 val user = User(email, "", name, password, "", "User", uid)
 
                 // ## Una vez obtenemos el uid lo usamos para guardar el usuario en la base de datos
-                database!!.child("users/users").child(uid.toString()).setValue(user)
+//                database!!.child("users/users").child(uid.toString()).setValue(user)
                 //Guardamos la contraseña en la base de datos para manipularla mas adelante
                 database!!.child("users/$uid/data/email").setValue(email)
-                database!!.child("users/$uid/data/lastName").setValue(name)
+                database!!.child("users/$uid/data/lastName").setValue("")
                 database!!.child("users/$uid/data/name").setValue(name)
                 database!!.child("users/$uid/data/pass").setValue(password)
                 database!!.child("users/$uid/data/phone").setValue("")
