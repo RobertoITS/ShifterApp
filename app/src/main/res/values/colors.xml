@@ -17,4 +17,6 @@
     <color name="LightGrey">#D3D3D3</color>
     <color name="error">#D50000</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="gray">#ACA8A7</color>
+    <color name="newTask">#1194AA</color>
 </resources>

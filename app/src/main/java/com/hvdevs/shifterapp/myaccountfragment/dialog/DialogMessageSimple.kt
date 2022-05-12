@@ -1,4 +1,4 @@
-package com.hvdevs.shifterapp
+package com.hvdevs.shifterapp.myaccountfragment.dialog
 
 import android.app.Dialog
 import android.content.Context
@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
+import com.hvdevs.shifterapp.R
 
 class DialogMessageSimple {
 

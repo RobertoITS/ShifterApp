@@ -1,4 +1,4 @@
-package com.hvdevs.shifterapp
+package com.hvdevs.shifterapp.myaccountfragment
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -11,7 +11,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Bundle
@@ -25,9 +24,9 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.database.R
 import com.google.firebase.storage.FirebaseStorage
 import com.hvdevs.shifterapp.databinding.FragmentMyAccountBinding
+import com.hvdevs.shifterapp.myaccountfragment.dialog.DialogMessageSimple
 import com.hvdevs.shifterapp.registerfragment.constructor.User
 import com.hvdevs.shifterapp.splashscreen.SplashScreen
 import com.theartofdev.edmodo.cropper.CropImage

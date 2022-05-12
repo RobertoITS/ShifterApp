@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.hvdevs.shifterapp.databinding.ActivityDashboardUserBinding
+import com.hvdevs.shifterapp.newappointment.NewAppointmentFragment
 
 class DashboardUserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDashboardUserBinding
@@ -43,7 +44,7 @@ class DashboardUserActivity : AppCompatActivity() {
     fun fragAdd(){
         val frag: Fragment? = supportFragmentManager.findFragmentById(R.id.frag)
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.frag, MyAccountFragment()).addToBackStack(null).commit()
+        transaction.add(R.id.frag, NewAppointmentFragment()).addToBackStack(null).commit()
     }
     private fun fragSelect(fragShow: Fragment) {
         //Instanciamos el contenedor
