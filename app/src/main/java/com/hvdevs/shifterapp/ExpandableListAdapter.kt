@@ -79,6 +79,6 @@ class ExpandableListAdapter: BaseExpandableListAdapter() {
     }
 
     override fun isChildSelectable(p0: Int, p1: Int): Boolean {
-        TODO("Not yet implemented")
+        return true
     }
 }

@@ -119,36 +119,32 @@
         android:elevation="20dp"
         android:layout_gravity="start"
         android:fitsSystemWindows="true">
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-            <LinearLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hola mundo"
+                android:textSize="20sp"
+                android:layout_marginVertical="15dp"/>
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginVertical="15dp"/>
+
+            <ExpandableListView
+                android:id="@+id/elv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:minHeight="400dp"/>
 
-                <TextView
-                    android:id="@+id/text3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Hola mundo"
-                    android:textSize="20sp"
-                    android:layout_marginVertical="15dp"/>
-                <ImageView
-                    android:id="@+id/img"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginVertical="15dp"/>
-
-                <ExpandableListView
-                    android:id="@+id/elv"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
 
     </com.google.android.material.navigation.NavigationView>
 
