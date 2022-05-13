@@ -10,10 +10,12 @@
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/drawable-v24/ic_lock_input.xml" value="0.1375" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/drawable-v24/ic_outline_home_48.xml" value="0.1375" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/drawable-v24/ic_person.xml" value="0.1375" />
+        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/drawable-v24/nav_icons_style.xml" value="0.135" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/drawable-v24/shape_button01.xml" value="0.1375" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/drawable-v24/shape_edit_text01.xml" value="0.1375" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/drawable-v24/shape_toolbar02.xml" value="0.1375" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/drawable-v24/shape_toolbar03.xml" value="0.1375" />
+        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/drawable/edit_text_shape.xml" value="0.135" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/drawable/my_shape.xml" value="0.135" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/drawable/shape_edit_text_error.xml" value="0.135" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/font/.xml" value="0.234375" />
@@ -23,10 +25,16 @@
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/activity_slash_screen.xml" value="0.22" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/calendar_cell.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/dialog_alert_pass.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/expandable_list.xml" value="0.25" />
+        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/fragment_dashboard.xml" value="0.22" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/fragment_my_account.xml" value="0.5" />
-        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/fragment_new_appointment.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/fragment_new_appointment.xml" value="0.22" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/fragment_tab_login.xml" value="0.22" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/fragment_tab_register.xml" value="0.25" />
+        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/layout_child.xml" value="0.6829268292682927" />
+        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/layout_group.xml" value="0.20102564102564102" />
+        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/profession_card.xml" value="0.25" />
+        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/profession_card_shimmer.xml" value="0.33" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/menu/bottom_menu.xml" value="0.20416666666666666" />
       </map>
     </option>

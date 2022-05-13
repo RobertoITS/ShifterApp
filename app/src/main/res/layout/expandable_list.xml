@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:minHeight="400dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/transparent"
+        android:hint="Selecciones tratamiento:"
+        android:layout_marginHorizontal="15dp"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:helperText="Seleccione un elemento"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp"
+        app:expandedHintEnabled="true"
+        app:hintTextColor="@color/Secondary"
+        android:layout_marginBottom="20dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/autoComplete"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@android:color/transparent"
+            android:inputType="none"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/newAppointmentProfessional"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/transparent"
+        android:hint="Seleccione turno"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp"
+        app:expandedHintEnabled="true"
+        app:helperText="Seleccione su turno"
+        app:hintTextColor="@color/Secondary">
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteProfessional"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="15dp"
+            android:backgroundTint="@android:color/transparent"
+            android:inputType="none"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+</LinearLayout>

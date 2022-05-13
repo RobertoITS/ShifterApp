@@ -3,49 +3,57 @@ package com.hvdevs.shifterapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.hvdevs.shifterapp.dashboardfragment.DashboardFragment
 import com.hvdevs.shifterapp.databinding.ActivityDashboardUserBinding
+import com.hvdevs.shifterapp.myaccountfragment.MyAccountFragment
 import com.hvdevs.shifterapp.newappointment.NewAppointmentFragment
 
 class DashboardUserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDashboardUserBinding
-    var open = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityDashboardUserBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.bottomnav.setOnItemSelectedListener { item ->
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction
+            .add(R.id.frag, DashboardFragment())
+            .commit()
 
-            when(item.itemId) {
+        binding.bottomNav.setItemSelected(R.id.home_page)
+
+        bottomNav()
+
+    }
+    private fun bottomNav(){
+        //Recurri a algo basico, no sabia como controlar la doble seleccion de los botones de navegacion :P
+        var open = ""
+        binding.bottomNav.setOnItemSelectedListener { item ->
+
+            when(item) {
                 R.id.home_page -> {
                     if (open != "a"){
-//                        fragSelect(DashboardUserFragment())
+                        fragSelect(DashboardFragment())
                         open = "a"
                     }
                 }
                 R.id.myAppointment -> {
                     if (open != "b"){
-//                        fragSelect(MyAppointmentFragment())
+                        fragSelect(NewAppointmentFragment())
                         open = "b"
                     }
                 }
                 R.id.esp -> {  }
                 R.id.myAccount -> {
                     if (open != "c"){
-//                        fragSelect(MyAccountFragment())
-                        fragAdd()
+                        fragSelect(MyAccountFragment())
                         open = "c"
                     }
                 }
             }
-            true
         }
     }
-    fun fragAdd(){
-        val frag: Fragment? = supportFragmentManager.findFragmentById(R.id.frag)
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.frag, NewAppointmentFragment()).addToBackStack(null).commit()
-    }
+
     private fun fragSelect(fragShow: Fragment) {
         //Instanciamos el contenedor
         val frag: Fragment? = supportFragmentManager.findFragmentById(R.id.frag)
@@ -67,15 +75,16 @@ class DashboardUserActivity : AppCompatActivity() {
         }
         transaction.commit()
     }
+
     override fun onBackPressed() {
         //El boton de atras vuelve a la pantalla principal
         //Si se cumple la condicion, se cierra la app
-        if (binding.bottomnav.selectedItemId == R.id.home_page){
+        if (binding.bottomNav.getSelectedItemId() == R.id.home_page){
             finish()
             super.onBackPressed()
         } else {
             //Con esta linea, selecciona un item del bottom nav!!
-            binding.bottomnav.selectedItemId = R.id.home_page
+            binding.bottomNav.setItemSelected(R.id.home_page)
         }
     }
 }

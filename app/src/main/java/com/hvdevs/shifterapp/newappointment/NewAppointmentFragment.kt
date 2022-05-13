@@ -6,13 +6,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.*
 import com.hvdevs.shifterapp.Resource
 import com.hvdevs.shifterapp.databinding.FragmentNewAppointmentBinding
+
 import com.hvdevs.shifterapp.newappointment.data.network.ShiftsRepoImplement
 import com.hvdevs.shifterapp.newappointment.domain.ShiftsUseCaseImplement
 import com.hvdevs.shifterapp.newappointment.presentation.viewmodel.ShiftsViewModel
@@ -45,15 +49,22 @@ class NewAppointmentFragment : Fragment() {
     ): View {
         _binding = FragmentNewAppointmentBinding.inflate(inflater, container, false)
 
+//        binding.listView.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
+//        arrayListOf("Copy", "Paste", "Cut", "Delete", "Convert", "Open"))
+
+        val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, arrayListOf("Item 1", "Item2"))
+        binding.included.autoComplete.setAdapter(arrayAdapter)
+
         val diaActual = Date()
         val anoActual = Calendar.getInstance()
-        anoActual.add(Calendar.MONTH, 12)
+        anoActual.add(Calendar.MONTH, 2)
         binding.calendar.init(diaActual, anoActual.time).inMode(CalendarPickerView.SelectionMode.SINGLE).withSelectedDate(diaActual)
         Log.d("DIAS", "${diaActual.time}, $anoActual")
 
-//        getData()
+        getData()
         binding.calendar.setOnDateSelectedListener(object : CalendarPickerView.OnDateSelectedListener{
             override fun onDateSelected(date: Date?) {
+                binding.dragView.performClick() //Llama al click de la vista
                 val selectedDate = DateFormat
                     .getDateInstance(
                         DateFormat.FULL

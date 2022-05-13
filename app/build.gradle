@@ -62,4 +62,11 @@ dependencies {
 
     // LiveData
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
+
+    //Others libraries
+    implementation 'com.sothree.slidinguppanel:library:3.4.0'
+    //Chip-Bottom-Bar
+    implementation 'com.ismaeldivita.chipnavigation:chip-navigation-bar:1.2.0'
+    //facebook shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 }
