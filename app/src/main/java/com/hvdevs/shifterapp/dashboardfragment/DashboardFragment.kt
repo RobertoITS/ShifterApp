@@ -31,20 +31,17 @@ class DashboardFragment : Fragment() {
         getData()
         binding.rv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rv.setHasFixedSize(true)
-
-        binding.card.expView
-        binding.card.showMore
+        
+        binding.card
         binding.card.expCard
 
-        binding.card.showMore.setOnClickListener {
-            if (binding.card.expView.visibility == View.GONE){
-                binding.card.showMore.text = "Show less"
+        binding.card.expCard.setOnClickListener {
+            if (binding.card.gone.visibility == View.GONE){
                 TransitionManager.beginDelayedTransition(binding.card.expCard, AutoTransition())
-                binding.card.expView.visibility = View.VISIBLE
+                binding.card.gone.visibility = View.VISIBLE
             } else {
-                binding.card.showMore.text = "Show more"
                 TransitionManager.beginDelayedTransition(binding.card.expCard, AutoTransition())
-                binding.card.expView.visibility = View.GONE
+                binding.card.gone.visibility = View.GONE
             }
         }
 
