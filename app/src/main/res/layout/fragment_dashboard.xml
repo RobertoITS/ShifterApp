@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".dashboardfragment.DashboardFragment"
-    tools:openDrawer="start"
+    tools:openDrawer=""
     android:id="@+id/dl">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -86,25 +86,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/image"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:src="@mipmap/nothing_here"
+                <include layout="@layout/appointment_card"
+                    android:id="@+id/card"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginTop="40dp"/>
-
-                <TextView
-                    android:text="Nada aqui..."
-                    android:textStyle="italic"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/image"
-                    android:textAlignment="center"
-                    android:layout_marginTop="40dp"
-                    android:textSize="20sp"/>
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

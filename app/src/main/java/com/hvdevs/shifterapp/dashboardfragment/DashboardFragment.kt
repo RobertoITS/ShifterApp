@@ -1,6 +1,8 @@
 package com.hvdevs.shifterapp.dashboardfragment
 
 import android.os.Bundle
+import android.transition.AutoTransition
+import android.transition.TransitionManager
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -29,6 +31,22 @@ class DashboardFragment : Fragment() {
         getData()
         binding.rv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rv.setHasFixedSize(true)
+
+        binding.card.expView
+        binding.card.showMore
+        binding.card.expCard
+
+        binding.card.showMore.setOnClickListener {
+            if (binding.card.expView.visibility == View.GONE){
+                binding.card.showMore.text = "Show less"
+                TransitionManager.beginDelayedTransition(binding.card.expCard, AutoTransition())
+                binding.card.expView.visibility = View.VISIBLE
+            } else {
+                binding.card.showMore.text = "Show more"
+                TransitionManager.beginDelayedTransition(binding.card.expCard, AutoTransition())
+                binding.card.expView.visibility = View.GONE
+            }
+        }
 
 
         return binding.root
