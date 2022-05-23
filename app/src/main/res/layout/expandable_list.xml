@@ -24,7 +24,7 @@
         android:layout_marginBottom="20dp">
 
         <AutoCompleteTextView
-            android:id="@+id/autoComplete"
+            android:id="@+id/autoCompleteProfession"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:backgroundTint="@android:color/transparent"
@@ -44,10 +44,35 @@
         app:boxCornerRadiusTopStart="15dp"
         app:expandedHintEnabled="true"
         app:helperText="Seleccione su turno"
-        app:hintTextColor="@color/Secondary">
+        app:hintTextColor="@color/Secondary"
+        android:layout_marginBottom="20dp">
 
         <AutoCompleteTextView
             android:id="@+id/autoCompleteProfessional"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="15dp"
+            android:backgroundTint="@android:color/transparent"
+            android:inputType="none"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/newAppointmentShift"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/transparent"
+        android:hint="Seleccione turno"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp"
+        app:expandedHintEnabled="true"
+        app:helperText="Seleccione su turno"
+        app:hintTextColor="@color/Secondary">
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteShift"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="15dp"
