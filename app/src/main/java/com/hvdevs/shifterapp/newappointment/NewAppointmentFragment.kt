@@ -21,17 +21,15 @@ class NewAppointmentFragment : Fragment() {
     private var _binding: FragmentNewAppointmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var db: DatabaseReference
-
     private val professionList: ArrayList<String> = arrayListOf()
     private val professionalList: ArrayList<Professional> = arrayListOf() //El modelo de los profesionales
     private val name: ArrayList<String> = arrayListOf() //Solamente los nombres de los profesionales
     //La posicion del modelo con los nombres, coordinan para la busqueda del uid
     private val takenShift: ArrayList<String> = arrayListOf()
-    private val newShift: ArrayList<String> = arrayListOf()
+    private val modelShift: ArrayList<String> = arrayListOf()
 
     var v: String = ""
-    var list: ArrayList<Shifts> = arrayListOf()
+    var profession = ""
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
@@ -45,9 +43,15 @@ class NewAppointmentFragment : Fragment() {
 
         binding.calendar.setOnDateSelectedListener(object : CalendarPickerView.OnDateSelectedListener{
             override fun onDateSelected(date: Date?) {
+
+                v = "${date?.date}-${date?.month}-${date?.year}" //Obtenemos el id del dia para comparar en la db
+
                 binding.dragView.performClick() //Llama al click de la vista
 
-                professionList.clear()
+                professionList.clear() //Limpiamos las listas
+                professionalList.clear()
+                modelShift.clear()
+                takenShift.clear()
 
                 getProfession()
 
@@ -57,7 +61,7 @@ class NewAppointmentFragment : Fragment() {
 
                 Log.d("TIME", date.toString())
                 Log.d("TIME", date.day.toString()) //LUNES, MARTES ... DOMINGO
-                Log.d("TIME", date.month.toString()) //NUMERO DEL MES
+                Log.d("TIME", date.month.toString()) //NUMERO DEL MES, COMIENZA DESDE 0
                 Log.d("TIME", date.date.toString()) //NUMERO DEL DIA
                 Log.d("TIME", date.year.toString()) //NUMERO DEL AÑO CON UN 1 DELANTE: 122
 
@@ -77,56 +81,67 @@ class NewAppointmentFragment : Fragment() {
 
         binding.included.autoCompleteProfession.setOnItemClickListener { adapterView, view, i, l ->
             professionalList.clear()
-            getProfessional(professionList[i])
+            profession = professionList[i]
+            getProfessional(profession)
         }
 
         binding.included.autoCompleteProfessional.setOnItemClickListener { adapterView, view, i, l ->
+            modelShift.clear()
             takenShift.clear()
-            newShift.clear()
-            getShift(professionalList[i].uid)
+            getModelShift(professionalList[i].uid)
         }
 
         return binding.root
     }
 
-    private fun getProfession(){
-        db = FirebaseDatabase.getInstance().getReference("profession")
-        db.addValueEventListener(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()){
-                    for (profession in snapshot.children){
-                        val prof = profession.key
-                        professionList.add(prof!!)
-                    }
-                }
-                Log.d("FIREBASE", professionList.toString())
-                val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, professionList)
-                binding.included.autoCompleteProfession.setAdapter(arrayAdapter)
+    private fun getProfession(){ //Obtenemos las profesiones (estan guardadas como las "key")
+        val db = FirebaseDatabase.getInstance().getReference("profession").get()
+        db.addOnSuccessListener { dataProf ->
+            for (prof in dataProf.children){
+                val profession = prof.key
+                professionList.add(profession!!)
             }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-
-        })
+            val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, professionList)
+            binding.included.autoCompleteProfession.setAdapter(arrayAdapter)
+        }
     }
 
-    /**Obtenemos los id's en los nodos de la profesion, y por el id, lo buscamos nuevamente profesional por profesional: */
+    /**Obtenemos los id's en los nodos de la profesion, y por el id,
+     * lo buscamos nuevamente profesional por profesional: */
     private fun getProfessional(path: String) {
-        db = FirebaseDatabase.getInstance().getReference("profession/$path/professional")
-        db.addValueEventListener(object : ValueEventListener{
+        val db = FirebaseDatabase.getInstance().getReference("profession/$path/professional").get()
+        db.addOnSuccessListener { dataProfessional ->
+            for (professional in dataProfessional.children) {
+                val uid = professional.value.toString()
+                val dbProf = FirebaseDatabase.getInstance().getReference("professional/$uid").get()
+                dbProf.addOnSuccessListener { prof ->
+                    val profData = prof.getValue(Professional::class.java)
+                    professionalList.add(profData!!)
+                    name.add(profData.name) //Pasamos a esta lista solo los nombres, luego nos sirve la posicion
+                    //para comparar con la lista main
+                }
+            }
+            val arrayAdapter =
+                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, name)
+            binding.included.autoCompleteProfessional.setAdapter(arrayAdapter)
+        }
+    }
+
+    private fun getModelShift(uid: String) {
+        val dbShift = FirebaseDatabase.getInstance().getReference("professional/$uid/modelShift")
+        dbShift.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
-                    for (professional in snapshot.children){
-                        val uid = professional.value.toString()
-                        val dbProf = FirebaseDatabase.getInstance().getReference("professional/$uid")
-                        dbProf.addValueEventListener(object : ValueEventListener{
+                    for (shift in snapshot.children){
+                        val s = shift.key
+                        val dbChild = FirebaseDatabase.getInstance().getReference("professional/$uid/modelShift/$s")
+                        dbChild.addValueEventListener(object : ValueEventListener{
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 if (snapshot.exists()){
-                                    val prof = snapshot.getValue(Professional::class.java)
-                                    professionalList.add(prof!!)
-                                    name.add(prof.name) //Pasamos a esta lista solo los nombres, luego nos sirve la posicion
-                                    //para comparar con la lista main
+                                    for (s in snapshot.children){
+                                        val ss = s.value.toString()
+                                        modelShift.add(ss)
+                                    }
                                 }
                             }
 
@@ -137,9 +152,7 @@ class NewAppointmentFragment : Fragment() {
                         })
                     }
                 }
-                Log.d("FIREBASE", professionList.toString())
-                val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, name)
-                binding.included.autoCompleteProfessional.setAdapter(arrayAdapter)
+                getTakenShift(uid)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -149,11 +162,67 @@ class NewAppointmentFragment : Fragment() {
         })
     }
 
-    private fun getShift(uid: String) {
-        TODO("Not yet implemented")
-    }
+    private fun getTakenShift(uid: String){
+        val dbShift = FirebaseDatabase.getInstance().getReference("professional/$uid/takenShift/$profession/$v")
+        dbShift.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    for (shift in snapshot.children) {
+                        val s = shift.key
+                        val dbChild = FirebaseDatabase.getInstance()
+                            .getReference("professional/$uid/takenShift/$profession/$v/$s")
+                        dbChild.addValueEventListener(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                if (snapshot.exists()){
+                                    for (ss in snapshot.children){
+                                        val sss = ss.value.toString()
+                                        takenShift.add(sss)
+                                        Log.d("ASD", sss)
+                                        for (i in 0 until modelShift.size - 1){
+                                            if (sss == modelShift[i]) modelShift.removeAt(i)
+                                        }
+                                    }
+                                }
+                            }
 
-    private fun getDate(/*Aca pondriamos la uid del profesional que se selecciona antes*/){
+                            override fun onCancelled(error: DatabaseError) {
+                                TODO("Not yet implemented")
+                            }
 
+                        })
+                    }
+                }
+                val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, modelShift)
+                binding.included.autoCompleteShift.setAdapter(arrayAdapter)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
+//
+//    private fun getTakenShift(uid: String){
+//        val dbShift = FirebaseDatabase.getInstance().getReference("professional/$uid/takenShift/$profession/$v").get()
+//        dbShift.addOnSuccessListener { shiftKey ->
+//            for (keyShift in shiftKey.children){
+//                val key = shiftKey.key
+//                val dbChild = FirebaseDatabase.getInstance()
+//                    .getReference("professional/$uid/takenShift/$profession/$v/$key").get()
+//                dbChild.addOnSuccessListener { shift ->
+//                    for (fShift in shift.children){
+//                        val tShift = fShift.value.toString()
+////                        takenShift.add(tShift)
+//                        Log.d("ASD", tShift)
+//                        for (i in 0 until modelShift.size - 1){
+//                            if (tShift == modelShift[i]) modelShift.removeAt(i)
+//                        }
+//                    }
+//                }
+//            }
+//            val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, modelShift)
+//            binding.included.autoCompleteShift.setAdapter(arrayAdapter)
+//        }
+//    }
 }
