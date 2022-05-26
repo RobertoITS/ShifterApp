@@ -2,6 +2,8 @@ package com.hvdevs.shifterapp.newappointment
 
 import android.os.Build
 import android.os.Bundle
+import android.transition.AutoTransition
+import android.transition.TransitionManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.google.firebase.database.*
 import com.hvdevs.shifterapp.databinding.FragmentNewAppointmentBinding
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.squareup.timessquare.CalendarPickerView
 import java.text.DateFormat
 import java.util.*
@@ -35,6 +38,27 @@ class NewAppointmentFragment : Fragment() {
 
         _binding = FragmentNewAppointmentBinding.inflate(inflater, container, false)
 
+        binding.slidingPanel.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener{
+            override fun onPanelSlide(panel: View?, slideOffset: Float) {
+                //Funcionalidades sobre el drag de la vista
+            }
+
+            override fun onPanelStateChanged(
+                panel: View?,
+                previousState: SlidingUpPanelLayout.PanelState?,
+                newState: SlidingUpPanelLayout.PanelState?
+            ) {
+                //Controla el cambio de estado del dragView
+                if (binding.slidingPanel.panelState == SlidingUpPanelLayout.PanelState.COLLAPSED){
+                    binding.included.newAppointmentShift.visibility = View.GONE
+                    binding.included.newAppointmentProfessional.visibility = View.GONE
+                    binding.included.select.visibility = View.GONE
+                    binding.included.autoCompleteProfession.setText("")
+                }
+            }
+
+        })
+
         val diaActual = Date()
         val anoActual = Calendar.getInstance()
         anoActual.add(Calendar.MONTH, 2)
@@ -44,9 +68,14 @@ class NewAppointmentFragment : Fragment() {
         binding.calendar.setOnDateSelectedListener(object : CalendarPickerView.OnDateSelectedListener{
             override fun onDateSelected(date: Date?) {
 
-                v = "${date?.date}-${date?.month}-${date?.year}" //Obtenemos el id del dia para comparar en la db
+                if (binding.slidingPanel.panelState == SlidingUpPanelLayout.PanelState.COLLAPSED){
+                    expandSlidingUpPanel() //Expande el dragView
+                }
+                else{
+                    collapseSlidingUpPanel() //Colapsa el dragView
+                }
 
-                binding.dragView.performClick() //Llama al click de la vista
+                v = "${date?.date}-${date?.month}-${date?.year}" //Obtenemos el id del dia para comparar en la db
 
                 professionList.clear() //Limpiamos las listas
                 professionalList.clear()
@@ -83,15 +112,32 @@ class NewAppointmentFragment : Fragment() {
             professionalList.clear()
             profession = professionList[i]
             getProfessional(profession)
+            TransitionManager.beginDelayedTransition(binding.included.newAppointmentProfessional, AutoTransition())
+            binding.included.newAppointmentProfessional.visibility = View.VISIBLE
         }
 
         binding.included.autoCompleteProfessional.setOnItemClickListener { adapterView, view, i, l ->
             modelShift.clear()
             takenShift.clear()
             getModelShift(professionalList[i].uid)
+            TransitionManager.beginDelayedTransition(binding.included.newAppointmentShift, AutoTransition())
+            binding.included.newAppointmentShift.visibility = View.VISIBLE
+        }
+
+        binding.included.autoCompleteShift.setOnItemClickListener { adapterView, view, i, l ->
+
+            binding.included.select.visibility = View.VISIBLE
         }
 
         return binding.root
+    }
+
+    private fun collapseSlidingUpPanel() {
+        binding.slidingPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+    }
+
+    private fun expandSlidingUpPanel() {
+        binding.slidingPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
     }
 
     private fun getProfession(){ //Obtenemos las profesiones (estan guardadas como las "key")

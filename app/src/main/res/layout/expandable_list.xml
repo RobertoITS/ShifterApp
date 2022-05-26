@@ -8,17 +8,13 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/transparent"
         android:hint="Selecciones tratamiento:"
         android:layout_marginHorizontal="15dp"
-        app:boxCornerRadiusBottomEnd="15dp"
         app:helperText="Seleccione un elemento"
-        app:boxCornerRadiusBottomStart="15dp"
-        app:boxCornerRadiusTopEnd="15dp"
-        app:boxCornerRadiusTopStart="15dp"
         app:expandedHintEnabled="true"
         app:hintTextColor="@color/Secondary"
         android:layout_marginBottom="20dp">
@@ -33,17 +29,14 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/newAppointmentProfessional"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:backgroundTint="@android:color/transparent"
-        android:hint="Seleccione turno"
-        app:boxCornerRadiusBottomEnd="15dp"
-        app:boxCornerRadiusBottomStart="15dp"
-        app:boxCornerRadiusTopEnd="15dp"
-        app:boxCornerRadiusTopStart="15dp"
+        android:hint="Seleccione Especialista"
         app:expandedHintEnabled="true"
-        app:helperText="Seleccione su turno"
+        app:helperText="Seleccione un elemento"
         app:hintTextColor="@color/Secondary"
         android:layout_marginBottom="20dp">
 
@@ -58,17 +51,14 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/newAppointmentShift"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:visibility="gone"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/transparent"
         android:hint="Seleccione turno"
-        app:boxCornerRadiusBottomEnd="15dp"
-        app:boxCornerRadiusBottomStart="15dp"
-        app:boxCornerRadiusTopEnd="15dp"
-        app:boxCornerRadiusTopStart="15dp"
         app:expandedHintEnabled="true"
-        app:helperText="Seleccione su turno"
+        app:helperText="Seleccione un elemento"
         app:hintTextColor="@color/Secondary">
 
         <AutoCompleteTextView
@@ -80,5 +70,13 @@
             android:inputType="none"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <Button
+        android:id="@+id/select"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seleccionar"
+        android:layout_gravity="end"
+        android:layout_margin="20dp"/>
 
 </LinearLayout>

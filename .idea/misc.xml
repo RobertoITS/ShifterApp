@@ -23,11 +23,10 @@
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/activity_sign_in.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/activity_slash_screen.xml" value="0.22" />
-        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/appointment_card.xml" value="0.22" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/calendar_cell.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/dialog_alert_pass.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/expandable_list.xml" value="0.25" />
-        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/fragment_dashboard.xml" value="0.16" />
+        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/fragment_dashboard.xml" value="0.22" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/fragment_my_account.xml" value="0.5" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/fragment_new_appointment.xml" value="0.22" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/fragment_tab_login.xml" value="0.22" />
@@ -35,8 +34,10 @@
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/layout_child.xml" value="0.6829268292682927" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/layout_group.xml" value="0.20102564102564102" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/profession_card.xml" value="0.25" />
-        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/profession_card_shimmer.xml" value="0.5656565656565656" />
+        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/profession_card_shimmer.xml" value="0.33" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/menu/bottom_menu.xml" value="0.20416666666666666" />
+        <entry key="app/src/main/res/layout/expandable_list.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_new_appointment.xml" value="0.15" />
       </map>
     </option>
   </component>
