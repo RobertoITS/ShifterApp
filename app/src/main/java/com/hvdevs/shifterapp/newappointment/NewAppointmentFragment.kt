@@ -2,17 +2,16 @@ package com.hvdevs.shifterapp.newappointment
 
 import android.os.Build
 import android.os.Bundle
-import android.transition.AutoTransition
-import android.transition.TransitionManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.*
+import com.hvdevs.shifterapp.R
 import com.hvdevs.shifterapp.databinding.FragmentNewAppointmentBinding
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.squareup.timessquare.CalendarPickerView
@@ -29,14 +28,27 @@ class NewAppointmentFragment : Fragment() {
     private val name: ArrayList<String> = arrayListOf() //Solamente los nombres de los profesionales
     //La posicion del modelo con los nombres, coordinan para la busqueda del uid
     private val takenShift: ArrayList<String> = arrayListOf()
-    private val modelShift: ArrayList<String> = arrayListOf()
+    private val modelShift: ArrayList<ModelShift> = arrayListOf()
+    private val finalList: ArrayList<String> = arrayListOf()
 
     var v: String = ""
-    var profession = ""
+    var profession = 0
+    var time = 0
+    var professional = 0
+
+    var profNode = ""
+    var profNameNode = ""
+    var shiftNode = ""
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         _binding = FragmentNewAppointmentBinding.inflate(inflater, container, false)
+
+        //Al tocar el fade del sliding panel, este se cierra
+        binding.slidingPanel.setFadeOnClickListener {
+            this.collapseSlidingUpPanel()
+        }
 
         binding.slidingPanel.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener{
             override fun onPanelSlide(panel: View?, slideOffset: Float) {
@@ -49,21 +61,19 @@ class NewAppointmentFragment : Fragment() {
                 newState: SlidingUpPanelLayout.PanelState?
             ) {
                 //Controla el cambio de estado del dragView
+                if (binding.slidingPanel.panelState == SlidingUpPanelLayout.PanelState.EXPANDED){
+                    binding.included.noShift.visibility = View.GONE //Pasamos a invisible el TV
+                }
                 if (binding.slidingPanel.panelState == SlidingUpPanelLayout.PanelState.COLLAPSED){
-                    binding.included.newAppointmentShift.visibility = View.GONE
-                    binding.included.newAppointmentProfessional.visibility = View.GONE
-                    binding.included.select.visibility = View.GONE
-                    binding.included.autoCompleteProfession.setText("")
+                    clearFunctions() // Reiniciamos los edittext y las listas
                 }
             }
-
         })
 
-        val diaActual = Date()
+        val diaActual = Date() //Obtenemos el dia actual
         val anoActual = Calendar.getInstance()
-        anoActual.add(Calendar.MONTH, 2)
+        anoActual.add(Calendar.MONTH, 2) //Obtenemos 2 meses mas del calendatio para mostrar
         binding.calendar.init(diaActual, anoActual.time).inMode(CalendarPickerView.SelectionMode.SINGLE).withSelectedDate(diaActual)
-        Log.d("DIAS", "${diaActual.time}, $anoActual")
 
         binding.calendar.setOnDateSelectedListener(object : CalendarPickerView.OnDateSelectedListener{
             override fun onDateSelected(date: Date?) {
@@ -71,22 +81,16 @@ class NewAppointmentFragment : Fragment() {
                 if (binding.slidingPanel.panelState == SlidingUpPanelLayout.PanelState.COLLAPSED){
                     expandSlidingUpPanel() //Expande el dragView
                 }
-                else{
-                    collapseSlidingUpPanel() //Colapsa el dragView
-                }
 
+                /** La idea seria obtener los datos de la DB y comparar
+                 * si el turno aparece en la parte de takenShift, no deberia estar disponible **/
                 v = "${date?.date}-${date?.month}-${date?.year}" //Obtenemos el id del dia para comparar en la db
 
-                professionList.clear() //Limpiamos las listas
-                professionalList.clear()
-                modelShift.clear()
-                takenShift.clear()
-
-                getProfession()
+                getProfession() //Obtenemos las profesiones
 
                 val selectedDate = DateFormat.getDateInstance(DateFormat.FULL).format(date!!)
 
-                Toast.makeText(context, selectedDate, Toast.LENGTH_SHORT).show()
+                binding.included.date.text = selectedDate
 
                 Log.d("TIME", date.toString())
                 Log.d("TIME", date.day.toString()) //LUNES, MARTES ... DOMINGO
@@ -94,12 +98,6 @@ class NewAppointmentFragment : Fragment() {
                 Log.d("TIME", date.date.toString()) //NUMERO DEL DIA
                 Log.d("TIME", date.year.toString()) //NUMERO DEL AÑO CON UN 1 DELANTE: 122
 
-                /**
-                 * La idea seria obtener los datos de la DB y comparar
-                 * si el turno aparece en la parte de takenShift, no deberia estar disponible
-                 * **/
-                v = "${date.date}-${date.month}-${date.year}"
-                Log.d("TIME", v)
             }
 
             override fun onDateUnselected(date: Date?) {
@@ -110,33 +108,60 @@ class NewAppointmentFragment : Fragment() {
 
         binding.included.autoCompleteProfession.setOnItemClickListener { adapterView, view, i, l ->
             professionalList.clear()
-            profession = professionList[i]
-            getProfessional(profession)
-            TransitionManager.beginDelayedTransition(binding.included.newAppointmentProfessional, AutoTransition())
+            name.clear()
+            profession = i //Guardamos la posicion de la lista
+            getProfessional(professionList[i]) //Obtenemos los profesionales en la profesion
             binding.included.newAppointmentProfessional.visibility = View.VISIBLE
         }
 
         binding.included.autoCompleteProfessional.setOnItemClickListener { adapterView, view, i, l ->
-            modelShift.clear()
+            professional = i //Guardamos la posicion de la lista
+            modelShift.clear() //Limpiamos las listas
             takenShift.clear()
-            getModelShift(professionalList[i].uid)
-            TransitionManager.beginDelayedTransition(binding.included.newAppointmentShift, AutoTransition())
+            finalList.clear()
+            getModelShift(professionalList[i].uid) //Obtenemos el modelo de los turnos
             binding.included.newAppointmentShift.visibility = View.VISIBLE
         }
 
         binding.included.autoCompleteShift.setOnItemClickListener { adapterView, view, i, l ->
-
+            time = i //Guardamos la posicion de la lista
             binding.included.select.visibility = View.VISIBLE
+        }
+
+        binding.included.select.setOnClickListener {
+            takeTheShift() //Se toma el turno
         }
 
         return binding.root
     }
 
-    private fun collapseSlidingUpPanel() {
+    private fun clearFunctions() {
+        binding.included.newAppointmentShift.visibility = View.GONE
+        binding.included.newAppointmentProfessional.visibility = View.GONE
+        binding.included.select.visibility = View.GONE
+        binding.included.noShift.visibility = View.GONE
+        binding.included.autoCompleteProfession.setAdapter(null)
+        binding.included.autoCompleteProfessional.setAdapter(null)
+        binding.included.autoCompleteShift.setAdapter(null)
+        binding.included.autoCompleteProfession.setText("")
+        binding.included.autoCompleteProfessional.setText("")
+        binding.included.autoCompleteShift.setText("")
+        binding.included.autoCompleteProfession.clearFocus()
+        binding.included.autoCompleteProfessional.clearFocus()
+        binding.included.autoCompleteShift.clearFocus()
+        professionList.clear() //Limpiamos las listas
+        professionalList.clear()
+        name.clear()
+        finalList.clear()
+        modelShift.clear()
+        takenShift.clear()
+    }
+
+    private fun collapseSlidingUpPanel() { //Colapsa el panel
         binding.slidingPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
     }
 
-    private fun expandSlidingUpPanel() {
+    private fun expandSlidingUpPanel() { //Expande el panel
         binding.slidingPanel.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
     }
 
@@ -179,96 +204,130 @@ class NewAppointmentFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
                     for (shift in snapshot.children){
-                        val s = shift.key
-                        val dbChild = FirebaseDatabase.getInstance().getReference("professional/$uid/modelShift/$s")
+                        val sKey = shift.key //Obtenemos las key para ingresar a los datos
+                        val dbChild = FirebaseDatabase.getInstance().getReference("professional/$uid/modelShift/$sKey")
                         dbChild.addValueEventListener(object : ValueEventListener{
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 if (snapshot.exists()){
                                     for (s in snapshot.children){
-                                        val ss = s.value.toString()
-                                        modelShift.add(ss)
+                                        val time = s.value.toString()
+                                        val model = ModelShift(
+                                            s.value.toString(),
+                                            sKey.toString()
+                                        ) //Obtenemos el modelo de los turnos
+                                        modelShift.add(model)
+                                        finalList.add(time)
                                     }
                                 }
                             }
-
                             override fun onCancelled(error: DatabaseError) {
-                                TODO("Not yet implemented")
+                                return
                             }
-
                         })
                     }
                 }
                 getTakenShift(uid)
             }
-
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                return
             }
-
         })
     }
 
+    /**La disponibilidad es del profesional, no de la profesion:*/
     private fun getTakenShift(uid: String){
-        val dbShift = FirebaseDatabase.getInstance().getReference("professional/$uid/takenShift/$profession/$v")
+        val dbShift = FirebaseDatabase.getInstance().getReference("professional/$uid/takenShift")
         dbShift.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    for (shift in snapshot.children) {
-                        val s = shift.key
-                        val dbChild = FirebaseDatabase.getInstance()
-                            .getReference("professional/$uid/takenShift/$profession/$v/$s")
-                        dbChild.addValueEventListener(object : ValueEventListener {
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                if (snapshot.exists()){
-                                    for (ss in snapshot.children){
-                                        val sss = ss.value.toString()
-                                        takenShift.add(sss)
-                                        Log.d("ASD", sss)
-                                        for (i in 0 until modelShift.size - 1){
-                                            if (sss == modelShift[i]) modelShift.removeAt(i)
-                                        }
-                                    }
-                                }
-                            }
-
-                            override fun onCancelled(error: DatabaseError) {
-                                TODO("Not yet implemented")
-                            }
-
-                        })
+                    for (profession in snapshot.children) {
+                        val pKey = profession.key //Obtenemos las key del nodo de profesiones
+                        dateObtain(uid, pKey.toString())
                     }
                 }
-                val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, modelShift)
+                val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, finalList)
                 binding.included.autoCompleteShift.setAdapter(arrayAdapter)
             }
-
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                return
             }
-
         })
     }
-//
-//    private fun getTakenShift(uid: String){
-//        val dbShift = FirebaseDatabase.getInstance().getReference("professional/$uid/takenShift/$profession/$v").get()
-//        dbShift.addOnSuccessListener { shiftKey ->
-//            for (keyShift in shiftKey.children){
-//                val key = shiftKey.key
-//                val dbChild = FirebaseDatabase.getInstance()
-//                    .getReference("professional/$uid/takenShift/$profession/$v/$key").get()
-//                dbChild.addOnSuccessListener { shift ->
-//                    for (fShift in shift.children){
-//                        val tShift = fShift.value.toString()
-////                        takenShift.add(tShift)
-//                        Log.d("ASD", tShift)
-//                        for (i in 0 until modelShift.size - 1){
-//                            if (tShift == modelShift[i]) modelShift.removeAt(i)
-//                        }
-//                    }
-//                }
-//            }
-//            val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, modelShift)
-//            binding.included.autoCompleteShift.setAdapter(arrayAdapter)
-//        }
-//    }
+
+    private fun dateObtain(uid: String, pKey: String) {
+        val dbChild = FirebaseDatabase.getInstance()
+            .getReference("professional/$uid/takenShift/$pKey/$v")
+        dbChild.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    for (date in snapshot.children){
+                        val dKey = date.key.toString() //Obtenemos las key de las fechas
+                        shiftObtain(uid, pKey, dKey)
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                return
+            }
+        })
+    }
+
+    private fun shiftObtain(uid: String, pKey: String, dKey: String) {
+        val dbChild2 = FirebaseDatabase.getInstance()
+            .getReference("professional/$uid/takenShift/$pKey/$v/$dKey")
+        dbChild2.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    for (time in snapshot.children){
+                        val timeData = time.value.toString() //Obtenemos los turnos
+                        Log.d("ASD", timeData)
+                        finalList.remove(timeData) //Removemos los repetidos
+                        modelShift.remove(ModelShift(timeData, dKey))
+                        Log.d("ASD", modelShift.toString())
+                    }
+                    if (finalList.isEmpty()){
+                        binding.included.noShift.visibility = View.VISIBLE
+                        binding.included.newAppointmentShift.visibility = View.GONE
+                    } else {
+                        binding.included.newAppointmentShift.visibility = View.VISIBLE
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                return
+            }
+        })
+    }
+
+    /** La idea es usar la modelShift, para sacar la uid y guardarla asi en la db*/
+    private fun takeTheShift(){
+        //Guardamos los nodos donde se meterian los datos:
+        profNameNode = professionalList[professional].uid
+        profNode = professionList[profession]
+        shiftNode = modelShift[time].uid
+
+        val mDatabase = FirebaseDatabase.getInstance().reference
+        mDatabase.child("professional/$profNameNode/takenShift/$profNode/$v/$shiftNode").child("time")
+            .setValue(finalList[time])
+        binding.slidingPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+        onSNACK() //Llamamos al snackBar, para que, en caso de querer anular, se pueda
+    }
+
+    private fun cancelShift(){
+        val mDatabase = FirebaseDatabase.getInstance().reference
+        mDatabase.child("professional/$profNameNode/takenShift/$profNode/$v/$shiftNode").child("time")
+            .removeValue()
+    }
+
+    private fun onSNACK(){
+        // create an instance of the snackbar
+        val snackbar = Snackbar.make(requireActivity().findViewById(android.R.id.content), "Turno guardado", Snackbar.LENGTH_LONG)
+            .setAction("DESHACER") {
+                // action here
+                cancelShift()
+            }.setAnchorView(R.id.bottomNav) //Colocamos el an
+        // call show() method to
+        // display the snackbar
+        snackbar.show()
+    }
 }

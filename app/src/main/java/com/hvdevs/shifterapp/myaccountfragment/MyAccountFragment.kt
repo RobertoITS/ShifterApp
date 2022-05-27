@@ -11,6 +11,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Bundle
@@ -20,11 +21,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
+import com.hvdevs.shifterapp.R
+import com.hvdevs.shifterapp.R.*
+import com.hvdevs.shifterapp.databinding.ActivityDashboardUserBinding
 import com.hvdevs.shifterapp.databinding.FragmentMyAccountBinding
 import com.hvdevs.shifterapp.myaccountfragment.dialog.DialogMessageSimple
 import com.hvdevs.shifterapp.registerfragment.constructor.User
@@ -64,6 +70,10 @@ class MyAccountFragment : Fragment(), DialogMessageSimple.Data {
 
         //Creamos la instancia
         auth = FirebaseAuth.getInstance()
+
+        if (binding.phone.text.isNullOrEmpty() || binding.lastName.text.isNullOrEmpty() || binding.name.text.isNullOrEmpty()){
+            onSNACK()
+        }
 
         //Obtenemos la id de usuario
         val user: String = auth.currentUser!!.uid
@@ -160,7 +170,7 @@ class MyAccountFragment : Fragment(), DialogMessageSimple.Data {
             for (i in permissions.indices){
                 if (grantResults[i] == PackageManager.PERMISSION_DENIED){
                     allSuccess = false
-                    var requestAgain = shouldShowRequestPermissionRationale(permissions[i])
+                    val requestAgain = shouldShowRequestPermissionRationale(permissions[i])
                     if (requestAgain){
                         Toast.makeText(context, "Permisos denegados", Toast.LENGTH_LONG).show()
                     } else {
@@ -402,8 +412,8 @@ class MyAccountFragment : Fragment(), DialogMessageSimple.Data {
             .setDuration(750)
             .setListener(null)
         binding.data.text = "Volver"
-        binding.data.backgroundTintList = resources.getColorStateList(com.hvdevs.shifterapp.R.color.colorAccent)
-        binding.logout.backgroundTintList = resources.getColorStateList(com.hvdevs.shifterapp.R.color.Secondary)
+        binding.data.backgroundTintList = resources.getColorStateList(color.colorAccent)
+        binding.logout.backgroundTintList = resources.getColorStateList(color.Secondary)
         binding.logout.text = "Cambiar contraseña"
         enabled()
         //Cuando finaliza la tarea, trae de nuevo los datos
@@ -415,8 +425,8 @@ class MyAccountFragment : Fragment(), DialogMessageSimple.Data {
         binding.ok.animate().translationX(-500f).alpha(0F).setDuration(500).setStartDelay(300).start()
         binding.containerGone.isVisible = false
         binding.data.text = "Modificar datos"
-        binding.data.backgroundTintList = resources.getColorStateList(com.hvdevs.shifterapp.R.color.Secondary)
-        binding.logout.backgroundTintList = resources.getColorStateList(com.hvdevs.shifterapp.R.color.colorAccent)
+        binding.data.backgroundTintList = resources.getColorStateList(color.Secondary)
+        binding.logout.backgroundTintList = resources.getColorStateList(color.colorAccent)
         binding.logout.text = "Cerrar sesion"
         noEnabled()
 
@@ -444,7 +454,7 @@ class MyAccountFragment : Fragment(), DialogMessageSimple.Data {
 
     private fun getInfo(uid: String){
 
-        db = FirebaseDatabase.getInstance().getReference("users/users/$uid/data")
+        db = FirebaseDatabase.getInstance().getReference("users/$uid/data")
         db.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
@@ -505,5 +515,18 @@ class MyAccountFragment : Fragment(), DialogMessageSimple.Data {
             Toast.makeText(context, "No coinciden las contraseñas", Toast.LENGTH_LONG).show()
         }
         super.password(pass)
+    }
+
+    private fun onSNACK(){
+        // create an instance of the snackbar
+        val snackbar = Snackbar.make(requireActivity().findViewById(android.R.id.content), "Complete sus datos", Snackbar.LENGTH_LONG)
+            .setAction("COMPLETAR") {
+                // action here
+                binding.data.callOnClick()
+                binding.phone.isFocused
+            }.setAnchorView(R.id.bottomNav) //Colocamos el an
+        // call show() method to
+        // display the snackbar
+        snackbar.show()
     }
 }

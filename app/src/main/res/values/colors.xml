@@ -21,4 +21,17 @@
     <color name="gray">#ACA8A7</color>
     <color name="newTask">#1194AA</color>
     <color name="shimmerBackground">#dddddd</color>
+
+    <!--Colores del CalendarPickerView-->
+    <color name="calendar_active_month_bg">#B2A9E4</color>
+    <!--<color name="calendar_bg">#ffffffff</color>-->
+    <color name="calendar_divider">@color/white</color>
+    <color name="calendar_inactive_month_bg">#5742CF</color>
+    <color name="calendar_selected_day_bg">@color/Secondary</color>
+    <!--<color name="calendar_highlighted_day_bg">#ccffcc</color>-->
+    <!--<color name="calendar_selected_range_bg">#ff96caff</color>-->
+    <color name="calendar_text_inactive">#778088</color>
+    <color name="calendar_text_active">@color/black</color>
+    <color name="calendar_text_selected">#ffffffff</color>
+    <color name="calendar_text_unselectable">#7f778088</color>
 </resources>
