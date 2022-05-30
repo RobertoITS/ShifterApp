@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.hvdevs.shifterapp.R
 import com.hvdevs.shifterapp.databinding.FragmentNewAppointmentBinding
@@ -305,10 +306,16 @@ class NewAppointmentFragment : Fragment() {
         profNameNode = professionalList[professional].uid
         profNode = professionList[profession]
         shiftNode = modelShift[time].uid
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
 
         val mDatabase = FirebaseDatabase.getInstance().reference
         mDatabase.child("professional/$profNameNode/takenShift/$profNode/$v/$shiftNode").child("time")
             .setValue(finalList[time])
+        val uDatabase = FirebaseDatabase.getInstance().reference
+        uDatabase.child("users/$uid/shifts/$v/$shiftNode").child("image").setValue("ASD")
+        uDatabase.child("users/$uid/shifts/$v/$shiftNode").child("profession").setValue(profNode)
+        uDatabase.child("users/$uid/shifts/$v/$shiftNode").child("professional").setValue(profNameNode)
+        uDatabase.child("users/$uid/shifts/$v/$shiftNode").child("time").setValue(finalList[time])
         binding.slidingPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
         onSNACK() //Llamamos al snackBar, para que, en caso de querer anular, se pueda
     }
