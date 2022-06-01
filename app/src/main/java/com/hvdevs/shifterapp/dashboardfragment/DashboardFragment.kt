@@ -1,24 +1,30 @@
 package com.hvdevs.shifterapp.dashboardfragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.hvdevs.shifterapp.DashboardUserActivity
 import com.hvdevs.shifterapp.ExpandableListAdapter
+import com.hvdevs.shifterapp.RecyclerItemTouchHelper
 import com.hvdevs.shifterapp.databinding.FragmentDashboardBinding
 import com.hvdevs.shifterapp.newappointment.Professional
 import com.hvdevs.shifterapp.newappointment.Shifts
 
-class DashboardFragment : Fragment() {
+class DashboardFragment : Fragment(), RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
     private var list: ArrayList<String> = arrayListOf()
@@ -41,23 +47,21 @@ class DashboardFragment : Fragment() {
         getDataShift()
 
         getData()
+
+        val simpleCallback = RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this)
+        ItemTouchHelper(simpleCallback).attachToRecyclerView(binding.rvShift)
+
         binding.rv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rv.setHasFixedSize(true)
-        
-//        binding.card
-//        binding.card.expCard
-//
-//        binding.card.expCard.setOnClickListener {
-//            if (binding.card.gone.visibility == View.GONE){
-//                TransitionManager.beginDelayedTransition(binding.card.expCard, AutoTransition())
-//                binding.card.gone.visibility = View.VISIBLE
-//            } else {
-//                TransitionManager.beginDelayedTransition(binding.card.expCard, AutoTransition())
-//                binding.card.gone.visibility = View.GONE
-//            }
-//        }
+
+        checkItems()
 
         return binding.root
+    }
+
+    private fun checkItems(){
+        binding.noShift.visibility = if (shiftList.size == 0) View.VISIBLE
+                    else View.GONE
     }
 
     private fun getDataShift(){
@@ -65,17 +69,19 @@ class DashboardFragment : Fragment() {
         db.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(day: DataSnapshot) {
                 for (dayKey in day.children){
-                    val dKey = dayKey.key //Obtenemos las key
-                    Log.d("ASD", dKey.toString())
+                    val dKey = dayKey.key.toString() //Obtenemos las key
+                    Log.d("ASD", dKey)
                     val dbShift = FirebaseDatabase.getInstance().getReference("users/$uid/shifts/$dKey")
                     dbShift.addValueEventListener(object : ValueEventListener{
-                        override fun onDataChange(shift: DataSnapshot) {
-                            for (shiftKey in shift.children){ //Aca podemos obtener los datos por separado
-                                val image = shiftKey.child("image").value.toString()
-                                val profession = shiftKey.child("profession").value.toString()
-                                val professionalUid = shiftKey.child("professional").value.toString()
-                                val time = shiftKey.child("time").value.toString()
-                                getProfessional(professionalUid, image, profession, time)
+                        override fun onDataChange(shifts: DataSnapshot) {
+                            for (shift in shifts.children){ //Aca podemos obtener los datos por separado
+                                val image = shift.child("image").value.toString()
+                                val profession = shift.child("profession").value.toString()
+                                val professionalUid = shift.child("professional").value.toString()
+                                val time = shift.child("time").value.toString()
+                                val date = shift.child("date").value.toString()
+                                val shiftKey = shift.key.toString()
+                                getProfessional(professionalUid, image, profession, time, date, dKey, shiftKey)
                             }
                         }
 
@@ -87,7 +93,7 @@ class DashboardFragment : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Toast.makeText(context, "Accion cancelada!", Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -97,19 +103,30 @@ class DashboardFragment : Fragment() {
         professionalUid: String,
         image: String,
         profession: String,
-        time: String
+        time: String,
+        date: String,
+        dKey: String,
+        shiftKey: String
     ) {
-        var name = ""
+        var professional = ""
         val db = FirebaseDatabase.getInstance().getReference("professional/$professionalUid").get()
         db.addOnSuccessListener { prof ->
-            val profData = prof.getValue(Professional::class.java)!!
-            name = profData.name
-            val data = Shifts(image, profession, name, time)
+            val profData: Professional? = prof.getValue(Professional::class.java)
+            if (profData != null) {
+                professional = profData.name
+            }
+            val data = Shifts(date, dKey, image, profession, professional, professionalUid, shiftKey, time)
             shiftList.add(data)
-            Log.d("ASD", "$image, $profession, $time, $name")
+            Log.d("ASD", "$image, $profession, $time, $professional")
             sAdapter = ShiftAdapter(shiftList)
             binding.rvShift.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             binding.rvShift.adapter = sAdapter
+            checkItems()
+            sAdapter.setOnItemClickListener(object : ShiftAdapter.OnItemClickListener{
+                override fun onItemClick(position: Int) {
+//                    deleteEntry(position)
+                }
+            })
         }
     }
 
@@ -179,4 +196,12 @@ class DashboardFragment : Fragment() {
     }
 
     data class Parent(var name: String? = "", var itemList: ArrayList<String> = arrayListOf())
+
+    override fun onSwipe(viewHolder: RecyclerView.ViewHolder, direction: Int, position: Int) {
+        if (viewHolder is ShiftAdapter.ShiftViewHolder){
+            sAdapter.removeItem(viewHolder.adapterPosition)
+//            deleteEntry(position)
+            checkItems()
+        }
+    }
 }

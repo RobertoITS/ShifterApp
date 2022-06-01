@@ -18,7 +18,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.squareup.timessquare.CalendarPickerView
 import java.text.DateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class NewAppointmentFragment : Fragment() {
     private var _binding: FragmentNewAppointmentBinding? = null
@@ -40,11 +39,15 @@ class NewAppointmentFragment : Fragment() {
     var profNode = ""
     var profNameNode = ""
     var shiftNode = ""
+    var selectedDate = ""
+    var uid = ""
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         _binding = FragmentNewAppointmentBinding.inflate(inflater, container, false)
+
+        uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
         //Al tocar el fade del sliding panel, este se cierra
         binding.slidingPanel.setFadeOnClickListener {
@@ -89,11 +92,12 @@ class NewAppointmentFragment : Fragment() {
 
                 getProfession() //Obtenemos las profesiones
 
-                val selectedDate = DateFormat.getDateInstance(DateFormat.FULL).format(date!!)
+                selectedDate =  DateFormat.getDateInstance(DateFormat.FULL).format(date!!)
+                selectedDate = selectedDate.substring(0, 1).uppercase() + selectedDate.substring(1)
 
                 binding.included.date.text = selectedDate
 
-                Log.d("TIME", date.toString())
+                Log.d("TIME", selectedDate)
                 Log.d("TIME", date.day.toString()) //LUNES, MARTES ... DOMINGO
                 Log.d("TIME", date.month.toString()) //NUMERO DEL MES, COMIENZA DESDE 0
                 Log.d("TIME", date.date.toString()) //NUMERO DEL DIA
@@ -306,23 +310,28 @@ class NewAppointmentFragment : Fragment() {
         profNameNode = professionalList[professional].uid
         profNode = professionList[profession]
         shiftNode = modelShift[time].uid
-        val uid = FirebaseAuth.getInstance().currentUser?.uid
 
         val mDatabase = FirebaseDatabase.getInstance().reference
         mDatabase.child("professional/$profNameNode/takenShift/$profNode/$v/$shiftNode").child("time")
-            .setValue(finalList[time])
+            .setValue(finalList[time]) //Del lado del profesional
         val uDatabase = FirebaseDatabase.getInstance().reference
-        uDatabase.child("users/$uid/shifts/$v/$shiftNode").child("image").setValue("ASD")
-        uDatabase.child("users/$uid/shifts/$v/$shiftNode").child("profession").setValue(profNode)
-        uDatabase.child("users/$uid/shifts/$v/$shiftNode").child("professional").setValue(profNameNode)
-        uDatabase.child("users/$uid/shifts/$v/$shiftNode").child("time").setValue(finalList[time])
-        binding.slidingPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+        with(uDatabase.child("users/$uid/shifts/$v/$shiftNode")){ //Del lado del cliente
+            this.child("image").setValue("ASD")
+            this.child("profession").setValue(profNode)
+            this.child("professional").setValue(profNameNode)
+            this.child("time").setValue(finalList[time])
+            this.child("date").setValue(selectedDate)
+        }
+
+        binding.slidingPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED //Colapsamos la barra
         onSNACK() //Llamamos al snackBar, para que, en caso de querer anular, se pueda
     }
 
-    private fun cancelShift(){
+    private fun cancelShift(){ //Se cancela el turno
         val mDatabase = FirebaseDatabase.getInstance().reference
         mDatabase.child("professional/$profNameNode/takenShift/$profNode/$v/$shiftNode").child("time")
+            .removeValue()
+        mDatabase.child("users/$uid/shifts/$v/$shiftNode").child("time")
             .removeValue()
     }
 
