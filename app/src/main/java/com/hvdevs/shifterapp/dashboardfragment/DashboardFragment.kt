@@ -90,6 +90,7 @@ class DashboardFragment : Fragment(), RecyclerItemTouchHelper.RecyclerItemTouchH
 
                     })
                 }
+
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -116,18 +117,21 @@ class DashboardFragment : Fragment(), RecyclerItemTouchHelper.RecyclerItemTouchH
                 professional = profData.name
             }
             val data = Shifts(date, dKey, image, profession, professional, professionalUid, shiftKey, time)
-            shiftList.add(data)
+            if (!shiftList.contains(data)){
+                shiftList.add(data)
+                sAdapter = ShiftAdapter(shiftList)
+                binding.rvShift.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                binding.rvShift.adapter = sAdapter
+            }
             Log.d("ASD", "$image, $profession, $time, $professional")
-            sAdapter = ShiftAdapter(shiftList)
-            binding.rvShift.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            binding.rvShift.adapter = sAdapter
             checkItems()
-            sAdapter.setOnItemClickListener(object : ShiftAdapter.OnItemClickListener{
-                override fun onItemClick(position: Int) {
-//                    deleteEntry(position)
-                }
-            })
+//            sAdapter.setOnItemClickListener(object : ShiftAdapter.OnItemClickListener{
+//                override fun onItemClick(position: Int) {
+////                    deleteEntry(position)
+//                }
+//            })
         }
+//        return professional
     }
 
     private fun getData() {

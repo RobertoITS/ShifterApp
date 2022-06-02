@@ -14,25 +14,25 @@ import com.hvdevs.shifterapp.newappointment.Shifts
 
 class ShiftAdapter(var list: ArrayList<Shifts>): RecyclerView.Adapter<ShiftAdapter.ShiftViewHolder>() {
 
-    lateinit var mListener: OnItemClickListener
-    interface OnItemClickListener{
-        fun onItemClick(position: Int)
-    }
-    fun setOnItemClickListener(listener: OnItemClickListener){
-        mListener = listener
-    }
+//    lateinit var mListener: OnItemClickListener
+//    interface OnItemClickListener{
+//        fun onItemClick(position: Int)
+//    }
+//    fun setOnItemClickListener(listener: OnItemClickListener){
+//        mListener = listener
+//    }
 
-    class ShiftViewHolder(val binding: AppointmentCardBinding, listener: OnItemClickListener): RecyclerView.ViewHolder(binding.root){
+    class ShiftViewHolder(val binding: AppointmentCardBinding, /*listener: OnItemClickListener*/): RecyclerView.ViewHolder(binding.root){
         init {
-            binding.delete.setOnClickListener {
-                listener.onItemClick(adapterPosition)
-            }
+//            binding.delete.setOnClickListener {
+//                listener.onItemClick(adapterPosition)
+//            }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShiftViewHolder {
         val binding = AppointmentCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ShiftViewHolder(binding, mListener)
+        return ShiftViewHolder(binding, /*mListener*/)
     }
 
     override fun onBindViewHolder(holder: ShiftViewHolder, position: Int) {
