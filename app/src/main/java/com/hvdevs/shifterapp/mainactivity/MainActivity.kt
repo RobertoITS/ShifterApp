@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.hvdevs.shifterapp.R
+import com.hvdevs.shifterapp.TutorialActivity
 import com.hvdevs.shifterapp.databinding.ActivityMainBinding
 import com.hvdevs.shifterapp.signinactivity.SignInActivity
 
@@ -23,8 +24,8 @@ class MainActivity : AppCompatActivity() {
 
 
         //manejar cuando tocan el boton de registro
-        binding.loginBtn.setOnClickListener{
-            startActivity(Intent(this, SignInActivity::class.java))
+        binding.button.setOnClickListener{
+            startActivity(Intent(this, TutorialActivity::class.java))
             finish()
             this.overridePendingTransition(R.anim.enter, R.anim.leave)
         }

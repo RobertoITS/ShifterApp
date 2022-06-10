@@ -473,7 +473,7 @@ class MyAccountFragment : Fragment(), DialogMessageSimple.Data {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+
             }
 
         })
