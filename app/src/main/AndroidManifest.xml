@@ -18,30 +18,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShifterApp">
         <activity
-            android:name=".TutorialActivity"
+            android:name=".tutorialactivity.TutorialActivity"
             android:exported="false" />
         <!-- Agregamos la actividad del CropImage -->
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Theme.AppCompat" />
         <activity
-            android:name=".DashboardUserActivity"
+            android:name=".dashboard.DashboardUserActivity"
             android:exported="false" />
         <activity
             android:name=".signinactivity.SignInActivity"
             android:exported="false" />
         <activity
-            android:name=".splashscreen.SplashScreen"
+            android:name=".mainactivity.MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".mainactivity.MainActivity"
-            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"

@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.ShifterApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/new_color</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -17,4 +17,11 @@
         <item name="windowNoTitle">true</item>
         <item name="android:fontFamily">@font/roboto_thin</item>
     </style>
+
+    <style name="Button" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">@color/new_color</item>
+        <item name="android:textColor">@color/button_text_color</item>
+        <item name="backgroundTint">@color/button_bgn</item>
+    </style>
+
 </resources>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".newappointment.NewAppointmentFragment"
+    tools:context=".dashboard.newappointment.NewAppointmentFragment"
     android:id="@+id/slidingPanel"
     app:umanoDragView="@id/dragView"
     app:umanoScrollableView="@id/listView"

@@ -61,16 +61,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cornerRadius="8dp"
-            android:backgroundTint="@color/new_color"
-            android:fontFamily="@font/fredoka_one"
+            android:layout_height="55dp"
+            app:cornerRadius="16dp"
+            android:elevation="8dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginHorizontal="30dp"
             android:text="Siguiente"
+            android:fontFamily="@font/fredoka_one"
             android:textColor="@color/white"
-            android:layout_margin="20dp"
+            android:backgroundTint="@color/new_color"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
