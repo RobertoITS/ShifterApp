@@ -1,6 +1,8 @@
 package com.hvdevs.shifterapp.dashboard.dashboardfragment
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.view.LayoutInflater
@@ -12,7 +14,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.hvdevs.shifterapp.databinding.AppointmentCardBinding
 import com.hvdevs.shifterapp.dashboard.newappointment.Shifts
 
-class ShiftAdapter(var list: ArrayList<Shifts>): RecyclerView.Adapter<ShiftAdapter.ShiftViewHolder>() {
+class ShiftAdapter(var list: ArrayList<Shifts>, var context: Context): RecyclerView.Adapter<ShiftAdapter.ShiftViewHolder>() {
 
 //    lateinit var mListener: OnItemClickListener
 //    interface OnItemClickListener{
@@ -39,6 +41,7 @@ class ShiftAdapter(var list: ArrayList<Shifts>): RecyclerView.Adapter<ShiftAdapt
         val binding = holder.binding
         binding.time.text = list[position].date
         binding.profession.text = list[position].profession
+        binding.professional.text = list[position].professional
         binding.expCard.setOnClickListener {
             if(binding.gone.visibility == View.GONE) {
                 TransitionManager.beginDelayedTransition(binding.gone, AutoTransition())
@@ -56,9 +59,24 @@ class ShiftAdapter(var list: ArrayList<Shifts>): RecyclerView.Adapter<ShiftAdapt
     }
 
     fun removeItem(position: Int){
-        deleteEntry(position)
-        list.removeAt(position)
-        notifyItemRemoved(position)
+
+        val dialogBuilder = AlertDialog.Builder(context)
+        dialogBuilder
+            .setMessage("¿Cancelar el turno?")
+            .setCancelable(false) //No se puede cancelar el dialog
+            .setPositiveButton("Si") { dialog, which ->
+                deleteEntry(position)
+                list.removeAt(position)
+                notifyItemRemoved(position)
+                dialog.dismiss()
+            }
+            .setNegativeButton("No") { dialog, which ->
+                notifyItemChanged(position) //Con esto resetamos el swipe a su posicion original
+                dialog.dismiss()
+            }
+        val alert = dialogBuilder.create()
+        alert.setTitle("Anulación")
+        alert.show()
     }
 
     @SuppressLint("NotifyDataSetChanged")

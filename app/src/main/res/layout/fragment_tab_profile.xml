@@ -92,7 +92,7 @@
                 android:id="@+id/nameInput"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="@color/background_less_dark"
+                android:backgroundTint="@color/edit_text_bgn"
                 android:textColor="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -119,7 +119,7 @@
                 android:id="@+id/lastNameInput"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="@color/background_less_dark"
+                android:backgroundTint="@color/edit_text_bgn"
                 android:textColor="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -154,7 +154,7 @@
                 android:cursorVisible="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:backgroundTint="@color/background_less_dark"
+                android:backgroundTint="@color/edit_text_bgn"
                 android:textColor="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -181,7 +181,7 @@
                 android:id="@+id/emailInput"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="@color/background_less_dark"
+                android:backgroundTint="@color/edit_text_bgn"
                 android:textColor="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -209,7 +209,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="phone"
-                android:backgroundTint="@color/background_less_dark"
+                android:backgroundTint="@color/edit_text_bgn"
                 android:textColor="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -235,7 +235,7 @@
                 android:id="@+id/genderInput"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="@color/background_less_dark"
+                android:backgroundTint="@color/edit_text_bgn"
                 android:textColor="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -23,24 +23,24 @@
     <color name="shimmerBackground">#dddddd</color>
 
     <color name="new_color">#FB9400</color>
+    <color name="new_color_alpha">#40FB9400</color>
     <color name="background_dark">#181A20</color>
     <color name="background_less_dark">#1F222A</color>
     <color name="strokeColor">#2A2D34</color>
 
     <!--Colores del CalendarPickerView-->
-    <!--<color name="calendar_active_month_bg">#B2A9E4</color>-->
-    <!--<color name="calendar_bg">#ffffffff</color>-->
-
-    <color name="calendar_divider">@color/Secondary</color>
-    <!--
-    <color name="calendar_inactive_month_bg">#5742CF</color>
-    <color name="calendar_selected_day_bg">@color/Secondary</color>-->
-    <!--<color name="calendar_highlighted_day_bg">#ccffcc</color>-->
+    <color name="calendar_active_month_bg">@color/strokeColor</color>
+    <color name="calendar_bg">@color/background_dark</color>
+    <color name="calendar_divider">@color/new_color</color>
+    <color name="calendar_inactive_month_bg">@color/background_less_dark</color>
+    <color name="calendar_selected_day_bg">@color/new_color_alpha</color>
+    <color name="calendar_highlighted_day_bg">@color/background_less_dark</color>
     <!--<color name="calendar_selected_range_bg">#ff96caff</color>-->
-    <!--
-    <color name="calendar_text_inactive">#778088</color>
-    <color name="calendar_text_active">@color/black</color>
-    <color name="calendar_text_selected">#ffffffff</color>
-    <color name="calendar_text_unselectable">#7f778088</color>-->
+    <color name="calendar_text_inactive">@color/white</color>
+    <color name="calendar_text_active">@color/white</color>
+    <color name="calendar_text_selected">@color/white</color>
+    <color name="calendar_text_unselectable">@color/white</color>
 
+    <!--Color de las lineas de los edittext-->
+    <color name="mtrl_textinput_default_box_stroke_color" tools:ignore="PrivateResource">@color/new_color</color>
 </resources>

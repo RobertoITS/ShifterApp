@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/background_dark"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".dashboard.newappointment.NewAppointmentFragment"
     android:id="@+id/slidingPanel"
@@ -26,6 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            android:background="@color/background_dark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +41,8 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/background_less_dark">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,7 +63,9 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:layout_marginStart="30dp"
-                android:text="Seleccione su turno" />
+                android:text="Seleccione su turno"
+                android:textColor="@color/white"
+                android:fontFamily="@font/fredoka_one"/>
 
         </LinearLayout>
 

@@ -62,7 +62,7 @@
                 android:id="@+id/userInput"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="@color/background_less_dark"
+                android:backgroundTint="@color/edit_text_bgn"
                 android:textColor="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -90,7 +90,7 @@
                 android:id="@+id/passInput"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="@color/background_less_dark"
+                android:backgroundTint="@color/edit_text_bgn"
                 android:inputType="numberPassword"
                 android:textColor="@color/white" />
 

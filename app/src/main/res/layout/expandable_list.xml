@@ -26,6 +26,7 @@
             android:text="Seleccione una fecha"
             android:layout_marginStart="15dp"
             android:textColor="@color/white"
+            android:fontFamily="@font/fredoka_one"
             android:textSize="15sp"/>
 
     </LinearLayout>
@@ -40,7 +41,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/speciality"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"/>
 
     <TextView
@@ -63,13 +64,11 @@
         android:text="Seleccione Horario:"
         android:layout_margin="20dp"/>
 
-    <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/mt"
-        android:layout_marginHorizontal="20dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/shift"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </com.google.android.material.button.MaterialButtonToggleGroup>
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="20dp"/>
 
     <Button
         android:id="@+id/select"

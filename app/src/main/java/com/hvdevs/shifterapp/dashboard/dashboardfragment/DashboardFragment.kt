@@ -11,10 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.hvdevs.shifterapp.databinding.FragmentDashboardBinding
 import com.hvdevs.shifterapp.dashboard.newappointment.Professional
 import com.hvdevs.shifterapp.dashboard.newappointment.Shifts
@@ -39,6 +36,9 @@ class DashboardFragment : Fragment(), RecyclerItemTouchHelper.RecyclerItemTouchH
 
         auth = FirebaseAuth.getInstance()
         uid = auth.currentUser!!.uid
+        Log.d("ASD", uid)
+        getName()
+
         getDataShift()
 
         getData()
@@ -52,6 +52,15 @@ class DashboardFragment : Fragment(), RecyclerItemTouchHelper.RecyclerItemTouchH
         checkItems()
 
         return binding.root
+    }
+
+    private fun getName() { //Obtenemos el nombre del cliente
+        val db = FirebaseDatabase.getInstance().getReference("users/$uid/data/name").get()
+        db.addOnSuccessListener {
+            val name = it.value.toString()
+            Log.d("ASD", name)
+            binding.name.text = name
+        }
     }
 
     private fun checkItems(){
@@ -113,7 +122,7 @@ class DashboardFragment : Fragment(), RecyclerItemTouchHelper.RecyclerItemTouchH
             val data = Shifts(date, dKey, image, profession, professional, professionalUid, shiftKey, time)
             if (!shiftList.contains(data)){
                 shiftList.add(data)
-                sAdapter = ShiftAdapter(shiftList)
+                sAdapter = ShiftAdapter(shiftList, requireContext())
                 binding.rvShift.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                 binding.rvShift.adapter = sAdapter
             }

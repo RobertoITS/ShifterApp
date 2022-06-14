@@ -154,6 +154,10 @@ class NewAppointmentFragment : Fragment() {
             this.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             this.setHasFixedSize(true)
         }
+        with(binding.included.shift){
+            this.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            this.setHasFixedSize(true)
+        }
     }
 
     private fun clearFunctions() {
@@ -222,11 +226,12 @@ class NewAppointmentFragment : Fragment() {
                     //para comparar con la lista main
                 }
             }
-            val pAdapter = ProfessionAdapter(name)
+            val pAdapter = VariousAdapter(name)
             binding.included.specialist.adapter = pAdapter
-            pAdapter.setOnItemClickListener(object : ProfessionAdapter.OnItemClickListener{
+            pAdapter.setOnItemClickListener(object : VariousAdapter.OnItemClickListener{
                 override fun onItemClick(position: Int) {
-                Toast.makeText(context, name[position], Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Asi", Toast.LENGTH_SHORT).show()
+                    getModelShift(professionalList[position].uid)
                 }
 
             })
@@ -282,7 +287,16 @@ class NewAppointmentFragment : Fragment() {
                 }
                 val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, finalList)
 //                binding.included.autoCompleteShift.setAdapter(arrayAdapter)
+                Log.d("ASD", finalList.toString())
+                val mAdapter = VariousAdapter(finalList)
+                binding.included.shift.adapter = mAdapter
+                mAdapter.setOnItemClickListener(object: VariousAdapter.OnItemClickListener{
+                    override fun onItemClick(position: Int) {
+                        Toast.makeText(context, "ando", Toast.LENGTH_SHORT).show()
+                    }
+                })
             }
+
             override fun onCancelled(error: DatabaseError) {
                 return
             }
