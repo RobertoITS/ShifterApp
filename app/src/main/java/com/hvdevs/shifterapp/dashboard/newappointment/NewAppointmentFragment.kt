@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -116,28 +118,6 @@ class NewAppointmentFragment : Fragment() {
 
         })
 
-//        binding.included.autoCompleteProfession.setOnItemClickListener { adapterView, view, i, l ->
-//            professionalList.clear()
-//            name.clear()
-//            profession = i //Guardamos la posicion de la lista
-//            getProfessional(professionList[i]) //Obtenemos los profesionales en la profesion
-////            binding.included.newAppointmentProfessional.visibility = View.VISIBLE
-//        }
-//
-//        binding.included.autoCompleteProfessional.setOnItemClickListener { adapterView, view, i, l ->
-//            professional = i //Guardamos la posicion de la lista
-//            modelShift.clear() //Limpiamos las listas
-//            takenShift.clear()
-//            finalList.clear()
-//            getModelShift(professionalList[i].uid) //Obtenemos el modelo de los turnos
-//            binding.included.newAppointmentShift.visibility = View.VISIBLE
-//        }
-
-//        binding.included.autoCompleteShift.setOnItemClickListener { adapterView, view, i, l ->
-//            time = i //Guardamos la posicion de la lista
-//            binding.included.select.visibility = View.VISIBLE
-//        }
-
         binding.included.select.setOnClickListener {
             takeTheShift() //Se toma el turno
         }
@@ -161,25 +141,20 @@ class NewAppointmentFragment : Fragment() {
     }
 
     private fun clearFunctions() {
-//        binding.included.newAppointmentShift.visibility = View.GONE
-//        binding.included.newAppointmentProfessional.visibility = View.GONE
-//        binding.included.select.visibility = View.GONE
-//        binding.included.noShift.visibility = View.GONE
-//        binding.included.autoCompleteProfession.setAdapter(null)
-//        binding.included.autoCompleteProfessional.setAdapter(null)
-//        binding.included.autoCompleteShift.setAdapter(null)
-//        binding.included.autoCompleteProfession.setText("")
-//        binding.included.autoCompleteProfessional.setText("")
-//        binding.included.autoCompleteShift.setText("")
-//        binding.included.autoCompleteProfession.clearFocus()
-//        binding.included.autoCompleteProfessional.clearFocus()
-//        binding.included.autoCompleteShift.clearFocus()
+        binding.included.ll01.visibility = View.GONE
+        binding.included.ll02.visibility = View.GONE
+        binding.included.select.visibility = View.GONE
+        binding.included.noShift.visibility = View.GONE
+        binding.included.specialist.adapter = null
+        binding.included.speciality.adapter = null
+        binding.included.shift.adapter = null
         professionList.clear() //Limpiamos las listas
         professionalList.clear()
         name.clear()
         finalList.clear()
         modelShift.clear()
         takenShift.clear()
+        binding.included.date.text = "Seleccione una fecha"
     }
 
     private fun collapseSlidingUpPanel() { //Colapsa el panel
@@ -197,10 +172,31 @@ class NewAppointmentFragment : Fragment() {
                 val profession = prof.key.toString()
                 professionList.add(profession)
             }
-            val pAdapter = ProfessionAdapter(professionList)
+            val pAdapter = VariousAdapter(professionList)
             binding.included.speciality.adapter = pAdapter
-            pAdapter.setOnItemClickListener(object : ProfessionAdapter.OnItemClickListener{
-                override fun onItemClick(position: Int) {
+            pAdapter.setOnItemClickListener(object : VariousAdapter.OnItemClickListener{
+                var lastChecked: MaterialButton? = null
+                var lastCheckedPos = 0
+                override fun onItemClick(position: Int, button: View) {
+                    //Obtenemos el button actual
+                    val b = button as MaterialButton
+                    //Pasamos el "tag" de ese b, y dejamos constancia de la ultima
+                    //posicion de donde se hizo "click"
+                    val clickedPos = (b.tag as Int).toInt()
+                    if (b.isChecked){
+                        if (lastChecked != null) {
+                            //Aqui, si se cumplen las condiciones, el ultimo tocado
+                            //deja de esta checkeado
+                            lastChecked!!.isChecked = false
+                        }
+                        //Actualizamos los datos
+                        lastChecked = b
+                        lastCheckedPos = clickedPos
+                    } else lastChecked = null
+                    professionalList.clear()
+                    name.clear()
+                    profession = position //Guardamos la posicion de la lista
+                    binding.included.ll01.visibility = View.VISIBLE
                     getProfessional(professionList[position])
                 }
             })
@@ -229,11 +225,34 @@ class NewAppointmentFragment : Fragment() {
             val pAdapter = VariousAdapter(name)
             binding.included.specialist.adapter = pAdapter
             pAdapter.setOnItemClickListener(object : VariousAdapter.OnItemClickListener{
-                override fun onItemClick(position: Int) {
-                    Toast.makeText(context, "Asi", Toast.LENGTH_SHORT).show()
+                var lastChecked: MaterialButton? = null
+                var lastCheckedPos = 0
+                override fun onItemClick(position: Int, button: View) {
+
+                    professional = position //Guardamos la posicion de la lista
+                    modelShift.clear() //Limpiamos las listas
+                    takenShift.clear()
+                    finalList.clear()
+
+                    binding.included.ll02.visibility = View.VISIBLE
+
+                    //Obtenemos el button actual
+                    val b = button as MaterialButton
+                    //Pasamos el "tag" de ese b, y dejamos constancia de la ultima
+                    //posicion de donde se hizo "click"
+                    val clickedPos = (b.tag as Int).toInt()
+                    if (b.isChecked){
+                        if (lastChecked != null) {
+                            //Aqui, si se cumplen las condiciones, el ultimo tocado
+                            //deja de esta checkeado
+                            lastChecked!!.isChecked = false
+                        }
+                        //Actualizamos los datos
+                        lastChecked = b
+                        lastCheckedPos = clickedPos
+                    } else lastChecked = null
                     getModelShift(professionalList[position].uid)
                 }
-
             })
         }
     }
@@ -285,14 +304,29 @@ class NewAppointmentFragment : Fragment() {
                         dateObtain(uid, pKey.toString())
                     }
                 }
-                val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, finalList)
-//                binding.included.autoCompleteShift.setAdapter(arrayAdapter)
-                Log.d("ASD", finalList.toString())
                 val mAdapter = VariousAdapter(finalList)
                 binding.included.shift.adapter = mAdapter
                 mAdapter.setOnItemClickListener(object: VariousAdapter.OnItemClickListener{
-                    override fun onItemClick(position: Int) {
-                        Toast.makeText(context, "ando", Toast.LENGTH_SHORT).show()
+                    var lastChecked: MaterialButton? = null
+                    var lastCheckedPos = 0
+                    override fun onItemClick(position: Int, button: View) {
+                        //Obtenemos el button actual
+                        val b = button as MaterialButton
+                        //Pasamos el "tag" de ese b, y dejamos constancia de la ultima
+                        //posicion de donde se hizo "click"
+                        val clickedPos = (b.tag as Int).toInt()
+                        if (b.isChecked){
+                            if (lastChecked != null) {
+                                //Aqui, si se cumplen las condiciones, el ultimo tocado
+                                //deja de esta checkeado
+                                lastChecked!!.isChecked = false
+                            }
+                            //Actualizamos los datos
+                            lastChecked = b
+                            lastCheckedPos = clickedPos
+                        } else lastChecked = null
+                        time = position //Guardamos la posicion de la lista
+                        binding.included.select.visibility = View.VISIBLE
                     }
                 })
             }

@@ -23,8 +23,13 @@ class ProfessionAdapter(private val list: ArrayList<String>): RecyclerView.Adapt
 
         /**Inicializamos el click y el check*/
         init {
-            itemView.setOnClickListener{
-                listener.onItemClick(adapterPosition)
+            if (itemView is ViewGroup) {
+                for (i in 0 until itemView.childCount) {
+                    val item = itemView.getChildAt(i)
+                    item.setOnClickListener {
+                        listener.onItemClick(adapterPosition)
+                    }
+                }
             }
         }
     }

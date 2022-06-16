@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import com.hvdevs.shifterapp.R
 import com.hvdevs.shifterapp.dashboard.dashboardfragment.ProfessionAdapter
 
@@ -13,18 +14,18 @@ class VariousAdapter(private val list: ArrayList<String>): RecyclerView.Adapter<
     /**Creamos la funcion del clickListener*/
     private lateinit var mListener: OnItemClickListener
     interface OnItemClickListener{
-        fun onItemClick(position: Int)
+        fun onItemClick(position: Int, button: View)
     }
     fun setOnItemClickListener(listener: OnItemClickListener){
         mListener = listener
     }
 
     class VariousViewHolder(itemView: View, listener: OnItemClickListener): RecyclerView.ViewHolder(itemView) {
-        val name: Button = itemView.findViewById(R.id.name)
+        val name: MaterialButton = itemView.findViewById(R.id.name)
         /**Inicializamos el click y el check*/
         init {
-            itemView.setOnClickListener{
-                listener.onItemClick(adapterPosition)
+            name.setOnClickListener{
+                listener.onItemClick(adapterPosition, name)
             }
         }
     }
@@ -37,9 +38,8 @@ class VariousAdapter(private val list: ArrayList<String>): RecyclerView.Adapter<
     override fun onBindViewHolder(holder: VariousViewHolder, position: Int) {
         val item = list[position]
         holder.name.text = item
-        holder.name.setOnClickListener {
-            mListener.onItemClick(position)
-        }
+        //Le pasamos un tag al elemento.
+        holder.name.tag = position
     }
 
     override fun getItemCount(): Int {

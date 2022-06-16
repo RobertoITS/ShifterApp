@@ -44,31 +44,49 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"/>
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/ll01"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Seleccione Especialista:"
-        android:textColor="@color/white"
-        android:layout_margin="20dp"/>
+        android:orientation="vertical"
+        android:visibility="gone">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/specialist"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Seleccione Especialista:"
+            android:textColor="@color/white"
+            android:layout_margin="20dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/specialist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll02"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"/>
+        android:orientation="vertical"
+        android:visibility="gone">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:text="Seleccione Horario:"
-        android:layout_margin="20dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Seleccione Horario:"
+            android:layout_margin="20dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/shift"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="20dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/shift"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"/>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/select"
