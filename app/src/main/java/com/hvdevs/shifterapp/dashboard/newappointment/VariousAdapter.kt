@@ -9,7 +9,7 @@ import com.google.android.material.button.MaterialButton
 import com.hvdevs.shifterapp.R
 import com.hvdevs.shifterapp.dashboard.dashboardfragment.ProfessionAdapter
 
-class VariousAdapter(private val list: ArrayList<String>): RecyclerView.Adapter<VariousAdapter.VariousViewHolder>() {
+class VariousAdapter(private var list: ArrayList<String>): RecyclerView.Adapter<VariousAdapter.VariousViewHolder>() {
 
     /**Creamos la funcion del clickListener*/
     private lateinit var mListener: OnItemClickListener

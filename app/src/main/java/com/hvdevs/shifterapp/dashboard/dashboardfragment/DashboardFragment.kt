@@ -120,11 +120,15 @@ class DashboardFragment : Fragment(), RecyclerItemTouchHelper.RecyclerItemTouchH
                 professional = profData.name
             }
             val data = Shifts(date, dKey, image, profession, professional, professionalUid, shiftKey, time)
-            if (!shiftList.contains(data)){
-                shiftList.add(data)
-                sAdapter = ShiftAdapter(shiftList, requireContext())
-                binding.rvShift.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                binding.rvShift.adapter = sAdapter
+            if (professionalUid != "null" && image != "null" && profession != "null" && time != "null" && date != "null" && dKey != "null"
+                && shiftKey != "null") {
+                if (!shiftList.contains(data)) {
+                    shiftList.add(data)
+                    sAdapter = ShiftAdapter(shiftList, requireContext())
+                    binding.rvShift.layoutManager =
+                        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                    binding.rvShift.adapter = sAdapter
+                }
             }
             Log.d("ASD", "$image, $profession, $time, $professional")
             checkItems()

@@ -5,20 +5,20 @@
     <item android:id="@+id/home_page"
         android:title="Inicio"
         android:icon="@drawable/ic_outline_home_48"
-        app:cnb_iconColor="@color/Secondary_2"/>
+        app:cnb_iconColor="@color/background_less_dark"/>
 
     <item android:id="@+id/myAppointment"
         android:title="Mis Turnos"
         android:icon="@drawable/ic_outline_calendar_today_24"
-        app:cnb_iconColor="@color/Secondary_2"/>
+        app:cnb_iconColor="@color/background_less_dark"/>
 
     <item android:id="@+id/esp"
         android:title="Especialistas"
         android:icon="@drawable/ic_outline_group_24"
-        app:cnb_iconColor="@color/Secondary_2"/>
+        app:cnb_iconColor="@color/background_less_dark"/>
 
     <item android:id="@+id/myAccount"
         android:title="Mi cuenta"
         android:icon="@drawable/ic_baseline_person_outline_24"
-        app:cnb_iconColor="@color/Secondary_2"/>
+        app:cnb_iconColor="@color/background_less_dark"/>
 </menu>

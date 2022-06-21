@@ -1,5 +1,6 @@
 package com.hvdevs.shifterapp.dashboard.newappointment
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -46,6 +47,8 @@ class NewAppointmentFragment : Fragment() {
     var shiftNode = ""
     var selectedDate = ""
     var uid = ""
+
+    lateinit var mAdapter: VariousAdapter
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -195,6 +198,9 @@ class NewAppointmentFragment : Fragment() {
                     } else lastChecked = null
                     professionalList.clear()
                     name.clear()
+                    binding.included.shift.adapter = null
+                    binding.included.ll02.visibility = View.GONE
+                    binding.included.select.visibility = View.GONE
                     profession = position //Guardamos la posicion de la lista
                     binding.included.ll01.visibility = View.VISIBLE
                     getProfessional(professionList[position])
@@ -206,55 +212,69 @@ class NewAppointmentFragment : Fragment() {
     /**Obtenemos los id's en los nodos de la profesion, y por el id,
      * lo buscamos nuevamente profesional por profesional: */
     private fun getProfessional(path: String) {
-        val db = FirebaseDatabase.getInstance().getReference("profession/$path/professional").get()
-        db.addOnSuccessListener { dataProfessional ->
-            for (professional in dataProfessional.children) {
-                val uid = professional.value.toString()
-                val dbProf = FirebaseDatabase.getInstance().getReference("professional/$uid").get()
-                dbProf.addOnSuccessListener { prof ->
-                    val profData = prof.getValue(Professional::class.java)
-                    if (profData != null) {
-                        professionalList.add(profData)
-                    }
-                    if (profData != null) {
-                        name.add(profData.name)
-                    } //Pasamos a esta lista solo los nombres, luego nos sirve la posicion
-                    //para comparar con la lista main
+        val db = FirebaseDatabase.getInstance().getReference("profession/$path/professional")
+        db.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(dataProfessional: DataSnapshot) {
+                for (professional in dataProfessional.children){
+                    val uid = professional.value.toString()
+                    val dbProf = FirebaseDatabase.getInstance().getReference("professional/$uid")
+                    dbProf.addValueEventListener(object: ValueEventListener{
+                        override fun onDataChange(prof: DataSnapshot) {
+                            val profData = prof.getValue(Professional::class.java)
+                            if (profData != null) {
+                                professionalList.add(profData)
+                            }
+                            if (profData != null) {
+                                name.add(profData.name)
+                            } //Pasamos a esta lista solo los nombres, luego nos sirve la posicion
+                            //para comparar con la lista main
+                            val pAdapter = VariousAdapter(name)
+                            binding.included.specialist.adapter = pAdapter
+                            pAdapter.setOnItemClickListener(object : VariousAdapter.OnItemClickListener {
+                                var lastChecked: MaterialButton? = null
+                                var lastCheckedPos = 0
+                                override fun onItemClick(position: Int, button: View) {
+
+                                    this@NewAppointmentFragment.professional = position //Guardamos la posicion de la lista
+                                    modelShift.clear() //Limpiamos las listas
+                                    takenShift.clear()
+                                    finalList.clear()
+
+                                    binding.included.ll02.visibility = View.VISIBLE
+
+                                    //Obtenemos el button actual
+                                    val b = button as MaterialButton
+                                    //Pasamos el "tag" de ese b, y dejamos constancia de la ultima
+                                    //posicion de donde se hizo "click"
+                                    val clickedPos = (b.tag as Int).toInt()
+                                    if (b.isChecked) {
+                                        if (lastChecked != null) {
+                                            //Aqui, si se cumplen las condiciones, el ultimo tocado
+                                            //deja de esta checkeado
+                                            lastChecked!!.isChecked = false
+                                        }
+                                        //Actualizamos los datos
+                                        lastChecked = b
+                                        lastCheckedPos = clickedPos
+                                    } else lastChecked = null
+                                    getModelShift(professionalList[position].uid)
+                                }
+                            })
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+
+                        }
+
+                    })
                 }
             }
-            val pAdapter = VariousAdapter(name)
-            binding.included.specialist.adapter = pAdapter
-            pAdapter.setOnItemClickListener(object : VariousAdapter.OnItemClickListener{
-                var lastChecked: MaterialButton? = null
-                var lastCheckedPos = 0
-                override fun onItemClick(position: Int, button: View) {
 
-                    professional = position //Guardamos la posicion de la lista
-                    modelShift.clear() //Limpiamos las listas
-                    takenShift.clear()
-                    finalList.clear()
+            override fun onCancelled(error: DatabaseError) {
 
-                    binding.included.ll02.visibility = View.VISIBLE
+            }
 
-                    //Obtenemos el button actual
-                    val b = button as MaterialButton
-                    //Pasamos el "tag" de ese b, y dejamos constancia de la ultima
-                    //posicion de donde se hizo "click"
-                    val clickedPos = (b.tag as Int).toInt()
-                    if (b.isChecked){
-                        if (lastChecked != null) {
-                            //Aqui, si se cumplen las condiciones, el ultimo tocado
-                            //deja de esta checkeado
-                            lastChecked!!.isChecked = false
-                        }
-                        //Actualizamos los datos
-                        lastChecked = b
-                        lastCheckedPos = clickedPos
-                    } else lastChecked = null
-                    getModelShift(professionalList[position].uid)
-                }
-            })
-        }
+        })
     }
 
     private fun getModelShift(uid: String) {
@@ -295,6 +315,7 @@ class NewAppointmentFragment : Fragment() {
 
     /**La disponibilidad es del profesional, no de la profesion:*/
     private fun getTakenShift(uid: String){
+
         val dbShift = FirebaseDatabase.getInstance().getReference("professional/$uid/takenShift")
         dbShift.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -304,7 +325,7 @@ class NewAppointmentFragment : Fragment() {
                         dateObtain(uid, pKey.toString())
                     }
                 }
-                val mAdapter = VariousAdapter(finalList)
+                mAdapter = VariousAdapter(finalList)
                 binding.included.shift.adapter = mAdapter
                 mAdapter.setOnItemClickListener(object: VariousAdapter.OnItemClickListener{
                     var lastChecked: MaterialButton? = null
@@ -335,6 +356,7 @@ class NewAppointmentFragment : Fragment() {
                 return
             }
         })
+
     }
 
     private fun dateObtain(uid: String, pKey: String) {
@@ -364,9 +386,15 @@ class NewAppointmentFragment : Fragment() {
                     for (time in snapshot.children){
                         val timeData = time.value.toString() //Obtenemos los turnos
                         Log.d("ASD", timeData)
+
+                        for (i in 0 until finalList.size){
+                            if (timeData == finalList[i]) mAdapter.notifyItemRemoved(i)
+                        }
+
                         finalList.remove(timeData) //Removemos los repetidos
                         modelShift.remove(ModelShift(timeData, dKey))
                         Log.d("ASD", modelShift.toString())
+
                     }
                     if (finalList.isEmpty()){
                         binding.included.noShift.visibility = View.VISIBLE

@@ -157,6 +157,7 @@
                     android:inputType="number"
                     android:backgroundTint="@color/edit_text_bgn"
                     android:enabled="false"
+                    android:textColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
@@ -184,6 +185,7 @@
                     android:enabled="false"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:textColor="@color/white"
                     android:backgroundTint="@color/edit_text_bgn"
                     />
 
@@ -219,6 +221,7 @@
                         android:id="@+id/pass"
                         android:inputType="textPassword"
                         android:ems="10"
+                        android:textColor="@color/white"
                         android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -243,6 +246,7 @@
                         android:id="@+id/repPass"
                         android:inputType="textPassword"
                         android:ems="10"
+                        android:textColor="@color/white"
                         android:enabled="false"
                         android:backgroundTint="@color/edit_text_bgn"
                         android:layout_width="match_parent"

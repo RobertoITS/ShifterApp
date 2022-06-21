@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.hvdevs.shifterapp.dashboard.DashboardUserActivity
 import com.hvdevs.shifterapp.databinding.AppointmentCardBinding
 import com.hvdevs.shifterapp.dashboard.newappointment.Shifts
 

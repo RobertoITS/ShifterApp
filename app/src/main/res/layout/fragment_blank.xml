@@ -6,34 +6,17 @@
     android:background="@color/background_dark">
 
 
-    <com.google.android.material.button.MaterialButtonToggleGroup
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:singleSelection="true"
+        android:textColor="@color/white"
+        android:text="Proximamente..."
+        android:textSize="30sp"
+        android:fontFamily="@font/fredoka_one"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Boton 1"
-            style="@style/Button"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Boton 2"
-            style="@style/Button"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Boton 3"
-            style="@style/Button"/>
-
-    </com.google.android.material.button.MaterialButtonToggleGroup>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

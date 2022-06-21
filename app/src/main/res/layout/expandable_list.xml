@@ -88,12 +88,16 @@
 
     </LinearLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/select"
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Seleccionar"
+        android:fontFamily="@font/fredoka_one"
+        android:textColor="@color/white"
+        app:cornerRadius="20dp"
+        android:elevation="8dp"
         android:layout_gravity="end"
         android:layout_margin="20dp"/>
 

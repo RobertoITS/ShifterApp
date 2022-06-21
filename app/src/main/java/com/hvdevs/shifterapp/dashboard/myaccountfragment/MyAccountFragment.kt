@@ -68,10 +68,6 @@ class MyAccountFragment : Fragment(), DialogMessageSimple.Data {
         //Creamos la instancia
         auth = FirebaseAuth.getInstance()
 
-        if (binding.phone.text.isNullOrEmpty() || binding.lastName.text.isNullOrEmpty() || binding.name.text.isNullOrEmpty()){
-            onSNACK()
-        }
-
         //Obtenemos la id de usuario
         val user: String = auth.currentUser!!.uid
 
@@ -416,7 +412,7 @@ class MyAccountFragment : Fragment(), DialogMessageSimple.Data {
             .setListener(null)
         binding.data.text = "Volver"
         binding.data.backgroundTintList = resources.getColorStateList(color.colorAccent)
-        binding.logout.backgroundTintList = resources.getColorStateList(color.Secondary)
+        binding.logout.backgroundTintList = resources.getColorStateList(color.new_color)
         binding.logout.text = "Cambiar contraseña"
         enabled()
         //Cuando finaliza la tarea, trae de nuevo los datos
@@ -428,7 +424,7 @@ class MyAccountFragment : Fragment(), DialogMessageSimple.Data {
         binding.ok.animate().translationX(-500f).alpha(0F).setDuration(500).setStartDelay(300).start()
         binding.containerGone.isVisible = false
         binding.data.text = "Modificar datos"
-        binding.data.backgroundTintList = resources.getColorStateList(color.Secondary)
+        binding.data.backgroundTintList = resources.getColorStateList(color.new_color)
         binding.logout.backgroundTintList = resources.getColorStateList(color.colorAccent)
         binding.logout.text = "Cerrar sesion"
         noEnabled()
@@ -472,6 +468,9 @@ class MyAccountFragment : Fragment(), DialogMessageSimple.Data {
                     val pass: String = snapshot.child("pass").value.toString()
                     binding.pass.setText(pass)
 
+                }
+                if (binding.phone.text.isNullOrEmpty() || binding.lastName.text.isNullOrEmpty() || binding.name.text.isNullOrEmpty()){
+                    onSNACK()
                 }
             }
 
