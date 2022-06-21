@@ -6,7 +6,7 @@
     android:background="@color/background_dark"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".dashboard.dashboardfragment.DashboardFragment"
-
+    tools:openDrawer="start"
     android:id="@+id/dl">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -209,6 +209,7 @@
         android:elevation="20dp"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        app:headerLayout="@layout/header_drawer"
         android:background="@color/background_less_dark">
 
         <LinearLayout

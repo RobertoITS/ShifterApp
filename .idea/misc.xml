@@ -37,6 +37,8 @@
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/fragment_tab_login.xml" value="0.22" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/fragment_tab_profile.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/fragment_tab_register.xml" value="0.25" />
+        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/header_drawer.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/image_container.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/layout_child.xml" value="0.6829268292682927" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/layout_group.xml" value="0.20102564102564102" />
         <entry key="..\:/Users/Giuliana/Desktop/Roberto/Proyectos/BASANI/ShifterApp/app/src/main/res/layout/profession_card.xml" value="0.25" />
@@ -54,7 +56,6 @@
         <entry key="app/src/main/res/drawable/image_button_shape.xml" value="0.103" />
         <entry key="app/src/main/res/layout/aaaa.xml" value="0.22" />
         <entry key="app/src/main/res/layout/aaaaaaaa.xml" value="0.20260416666666667" />
-        <entry key="app/src/main/res/layout/activity_dashboard_user.xml" value="0.15" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.20260416666666667" />
         <entry key="app/src/main/res/layout/activity_sign_in.xml" value="0.15" />
         <entry key="app/src/main/res/layout/activity_tutorial.xml" value="0.33" />
@@ -70,8 +71,6 @@
         <entry key="app/src/main/res/layout/fragment_tab_register.xml" value="0.2" />
         <entry key="app/src/main/res/layout/profession_card.xml" value="0.33" />
         <entry key="app/src/main/res/layout/profession_card_shimmer.xml" value="0.20260416666666667" />
-        <entry key="app/src/main/res/layout/professional.xml" value="0.33" />
-        <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.15" />
       </map>
     </option>
   </component>

@@ -1,6 +1,8 @@
 package com.hvdevs.shifterapp.dashboard.dashboardfragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +12,15 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.hvdevs.shifterapp.databinding.FragmentDashboardBinding
 import com.hvdevs.shifterapp.dashboard.newappointment.Professional
 import com.hvdevs.shifterapp.dashboard.newappointment.Shifts
+import com.hvdevs.shifterapp.R
 
 class DashboardFragment : Fragment(), RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     private var _binding: FragmentDashboardBinding? = null
@@ -28,6 +34,14 @@ class DashboardFragment : Fragment(), RecyclerItemTouchHelper.RecyclerItemTouchH
     private lateinit var auth: FirebaseAuth
     private lateinit var sAdapter: ShiftAdapter
     private var shiftList: ArrayList<Shifts> = arrayListOf()
+
+    //El viewPager2 (pasa las imagenes)
+    private lateinit var viewPager2: ViewPager2
+    private val sliderHandler = Handler()
+    //Lista de imagenes y su adaptador
+    private lateinit var imagesList: ArrayList<String>
+    private lateinit var iAdapter: SliderAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -159,6 +173,7 @@ class DashboardFragment : Fragment(), RecyclerItemTouchHelper.RecyclerItemTouchH
                     binding.dl.openDrawer(GravityCompat.START)
                     binding.text3.text = list[position]
                     dataList(list[position])
+                    getImages() //Obtenemos las imagenes
                 }
             })
         }
@@ -214,5 +229,77 @@ class DashboardFragment : Fragment(), RecyclerItemTouchHelper.RecyclerItemTouchH
 //            deleteEntry(position)
             checkItems()
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //Se tiene que colocar una vez que se crea la vista
+        val viewItem = binding.nv.getHeaderView(0)
+        viewPager2 = viewItem.findViewById(R.id.imageSliderViewPager)
+
+        viewPager2.clipToPadding = false
+        viewPager2.clipChildren = false
+        viewPager2.offscreenPageLimit = 3
+        viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+        val compositePageTransformer = CompositePageTransformer()
+        compositePageTransformer.addTransformer(MarginPageTransformer(30))
+        compositePageTransformer.addTransformer { page, position ->
+            val r = 1 - kotlin.math.abs(position)
+            page.scaleY = 0.85f + r * 0.25f
+        }
+
+        viewPager2.setPageTransformer(compositePageTransformer)
+        //Hasta aca, ver las animaciones
+
+        viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                sliderHandler.removeCallbacks(sliderRunnable)
+                sliderHandler.postDelayed(sliderRunnable, 3000)
+            }
+        })
+    }
+
+    //Variable tipo Runnable para ejecutar el codigo siempre y cuando este activo
+    private val sliderRunnable = Runnable {
+        viewPager2.currentItem = viewPager2.currentItem + 1
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sliderHandler.postDelayed(sliderRunnable, 3000)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sliderHandler.postDelayed(sliderRunnable, 3000)
+    }
+
+    //Obtenemos las imagenes
+    private fun getImages(){
+        val db = FirebaseDatabase.getInstance().getReference("profession/Criolipólisis/image").get()
+        imagesList = arrayListOf()
+        db.addOnSuccessListener { snapshot->
+            if (!snapshot.exists()){
+                Log.e("FIREBASE", "Lista vacía")
+            } else {
+                for (dc in snapshot.children){
+                    val image = dc.value.toString()
+                    Log.d("FIREBASE", image)
+                    image.let { imagesList.add(it) }
+                }
+                updateImages(imagesList)
+            }
+        }
+    }
+    //Actualizamos las listas de imagen
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateImages(imagesList: ArrayList<String>) {
+        //El adaptador
+        iAdapter = SliderAdapter(imagesList, viewPager2)
+        viewPager2.adapter = iAdapter
+        iAdapter.notifyDataSetChanged()
     }
 }
