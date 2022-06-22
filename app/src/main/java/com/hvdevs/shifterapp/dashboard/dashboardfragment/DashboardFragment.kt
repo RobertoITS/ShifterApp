@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.core.snap
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -39,7 +40,7 @@ class DashboardFragment : Fragment(), RecyclerItemTouchHelper.RecyclerItemTouchH
     private lateinit var viewPager2: ViewPager2
     private val sliderHandler = Handler()
     //Lista de imagenes y su adaptador
-    private lateinit var imagesList: ArrayList<String>
+    private var imagesList: ArrayList<String> = arrayListOf()
     private lateinit var iAdapter: SliderAdapter
 
     override fun onCreateView(
@@ -170,30 +171,81 @@ class DashboardFragment : Fragment(), RecyclerItemTouchHelper.RecyclerItemTouchH
             binding.rvShimmer.visibility = View.GONE
             mAdapter.setOnItemClickListener(object : ProfessionAdapter.OnItemClickListener{
                 override fun onItemClick(position: Int) {
+                    itemList.clear()
+                    parentItem.clear()
+                    imagesList.clear()
+                    binding.imageSliderViewPager.adapter = null
                     binding.dl.openDrawer(GravityCompat.START)
                     binding.text3.text = list[position]
                     dataList(list[position])
-                    getImages() //Obtenemos las imagenes
+                    getImages(list[position]) //Obtenemos las imagenes
                 }
             })
         }
     }
 
     private fun dataList(item: String) {
-        val db = FirebaseDatabase.getInstance().getReference("profession/$item").get()
-        db.addOnSuccessListener {
-            for(t in it.children){
-                val parent = t.key.toString()
-                val child = t.value.toString()
-                addItem(parent, child)
+//        val db2 = FirebaseDatabase.getInstance().getReference("profession/$item/professional").get()
+//        db2.addOnSuccessListener { professionalId ->
+//            for (prof in professionalId.children){
+//                val id = prof.value.toString()
+//                Log.d("FIREBASE", id)
+//                val dbProf = FirebaseDatabase.getInstance().getReference("professional/$id")
+//                dbProf.addValueEventListener(object : ValueEventListener{
+//                    override fun onDataChange(it: DataSnapshot) {
+//                        if (it.exists()) {
+//                            val professional = it.child("name").value.toString()
+//                            val pro = "Profesional"
+//                            addItem(pro, professional)
+//                        }
+//                    }
+//
+//                    override fun onCancelled(error: DatabaseError) {
+//
+//                    }
+//
+//                })
+//            }
+//        }
+        val db = FirebaseDatabase.getInstance().getReference("profession/$item") //.get()
+        db.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    val description = snapshot.child("description").value.toString()
+                    val desc = "Descripción"
+                    addItem(desc, description)
+                    val duration = snapshot.child("duration").value.toString()
+                    val dur = "Duración"
+                    addItem(dur, duration)
+                    val zones = snapshot.child("zones").value.toString()
+                    val zon = "Zonas"
+                    addItem(zon, zones)
+                }
                 eAdapter = ExpandableListAdapter()
                 eAdapter.getContext(requireContext(), binding.elv)
                 eAdapter.getList(itemList)
                 eAdapter.notifyDataSetChanged()
                 binding.elv.setAdapter(eAdapter)
             }
-            Log.d("FIREBASE", parentItem.toString())
-        }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
+//        db.addOnSuccessListener {
+//            for(t in it.children){
+//                val parent = t.key.toString()
+//                val child = t.value.toString()
+//                addItem(parent, child)
+//                eAdapter = ExpandableListAdapter()
+//                eAdapter.getContext(requireContext(), binding.elv)
+//                eAdapter.getList(itemList)
+//                eAdapter.notifyDataSetChanged()
+//                binding.elv.setAdapter(eAdapter)
+//            }
+//            Log.d("FIREBASE", parentItem.toString())
+//        }
 
     }
 
@@ -231,12 +283,12 @@ class DashboardFragment : Fragment(), RecyclerItemTouchHelper.RecyclerItemTouchH
         }
     }
 
+    /**De aca en adelante, la logica para el imageSlider:*/
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         //Se tiene que colocar una vez que se crea la vista
-        val viewItem = binding.nv.getHeaderView(0)
-        viewPager2 = viewItem.findViewById(R.id.imageSliderViewPager)
+        viewPager2 = binding.imageSliderViewPager
 
         viewPager2.clipToPadding = false
         viewPager2.clipChildren = false
@@ -278,9 +330,8 @@ class DashboardFragment : Fragment(), RecyclerItemTouchHelper.RecyclerItemTouchH
     }
 
     //Obtenemos las imagenes
-    private fun getImages(){
-        val db = FirebaseDatabase.getInstance().getReference("profession/Criolipólisis/image").get()
-        imagesList = arrayListOf()
+    private fun getImages(path: String){
+        val db = FirebaseDatabase.getInstance().getReference("profession/$path/image").get()
         db.addOnSuccessListener { snapshot->
             if (!snapshot.exists()){
                 Log.e("FIREBASE", "Lista vacía")

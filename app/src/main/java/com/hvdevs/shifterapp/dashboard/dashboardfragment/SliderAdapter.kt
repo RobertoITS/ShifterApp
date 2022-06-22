@@ -1,12 +1,14 @@
 package com.hvdevs.shifterapp.dashboard.dashboardfragment
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.hvdevs.shifterapp.R
 import com.squareup.picasso.Picasso
 
@@ -33,7 +35,9 @@ class SliderAdapter(items: ArrayList<String>, viewPager2: ViewPager2): RecyclerV
 
     override fun onBindViewHolder(holder: SliderViewHolder, position: Int) {
         val item = sliderItems[position]
-        Picasso.get().load(item).into(holder.image)
+        Log.d("ASD", item)
+        Glide.with(holder.image).load(item).into(holder.image)
+//        Picasso.get().load(item).into(holder.image)
         //Hasta aca la animacion:
         if (position == sliderItems.size - 2){
             viewPager2.post(runnable)

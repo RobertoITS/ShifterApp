@@ -1,5 +1,6 @@
 package com.hvdevs.shifterapp.dashboard.dashboardfragment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.ExpandableListView
 import android.widget.TextView
+import androidx.compose.ui.graphics.Color
 import com.hvdevs.shifterapp.R
 
 class ExpandableListAdapter: BaseExpandableListAdapter() {
@@ -54,6 +56,7 @@ class ExpandableListAdapter: BaseExpandableListAdapter() {
         return true
     }
 
+    @SuppressLint("InflateParams")
     override fun getGroupView(p0: Int, p1: Boolean, p2: View?, p3: ViewGroup?): View {
         val parentInfo: DashboardFragment.Parent = getGroup(p0) as DashboardFragment.Parent
         var currentView = p2
@@ -66,6 +69,7 @@ class ExpandableListAdapter: BaseExpandableListAdapter() {
         return currentView
     }
 
+    @SuppressLint("InflateParams")
     override fun getChildView(p0: Int, p1: Int, p2: Boolean, p3: View?, p4: ViewGroup?): View {
         val childInfo: String = getChild(p0, p1) as String
         var currentView = p3

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ShifterApp</string>
+    <string name="app_name">Turnero</string>
 
     <string name="back"><![CDATA[<]]></string>
     <string name="forward"><![CDATA[>]]></string>
